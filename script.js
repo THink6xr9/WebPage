@@ -109,6 +109,35 @@ function screenPixelate() {
   }, 700);
 }
 
+const leftEye = document.getElementById("btn1");
+const rightEye = document.getElementById("btn2");
+
+function triggerBlink(targets) {
+  targets.forEach(eye => eye.classList.add("blink"));
+
+  setTimeout(() => {
+    targets.forEach(eye => eye.classList.remove("blink"));
+  }, 220);
+}
+
+function randomBlink() {
+  const r = Math.random();
+
+  if (r < 0.33) {
+    triggerBlink([leftEye]);        // left only
+  } else if (r < 0.66) {
+    triggerBlink([rightEye]);       // right only
+  } else {
+    triggerBlink([leftEye, rightEye]); // both
+  }
+
+  // schedule next blink (calm, irregular)
+  const nextBlink = 3000 + Math.random() * 4000;
+  setTimeout(randomBlink, nextBlink);
+}
+
+// start blinking
+setTimeout(randomBlink, 2000);
 
 // Init
 assignRandomState();
