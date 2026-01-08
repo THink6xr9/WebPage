@@ -1,40 +1,69 @@
+/* -----------------------------
+   LINKS
+----------------------------- */
 const links = [
   "https://opensea.io/collection/time-402",
   "https://medium.com/@qmbgjhq",
   "https://x.com/_THink__6xr9"
 ];
 
+/* -----------------------------
+   COLORS (UNIQUE)
+----------------------------- */
 const colors = ["red", "blue", "yellow"];
-const buttons = [
-  document.getElementById("btn1"),
-  document.getElementById("btn2"),
-  document.getElementById("btn3")
-];
 
-// Shuffle helper
+/* -----------------------------
+   ELEMENTS
+----------------------------- */
+const leftEye = document.getElementById("btn1");
+const rightEye = document.getElementById("btn2");
+const exploreBtn = document.getElementById("btn3");
+
+/* -----------------------------
+   HELPERS
+----------------------------- */
 function shuffle(array) {
-  return [...array].sort(() => Math.random() - 0.5);
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
 
-// Apply colors
-function applyColors(colorSet) {
-  buttons.forEach((btn, i) => btn.style.color = colorSet[i]);
+/* -----------------------------
+   COLOR STATE (SINGLE SOURCE)
+----------------------------- */
+// [ left eye, right eye, mouth ]
+let colorState = shuffle(colors);
+
+function applyColorState() {
+  leftEye.style.color = colorState[0];
+  rightEye.style.color = colorState[1];
+  exploreBtn.style.color = colorState[2];
 }
 
-function getPixelSizeByTime() {
-  const hour = new Date().getHours();
+applyColorState();
 
-  if (hour >= 6 && hour < 12) return 6;   // morning
-  if (hour >= 12 && hour < 18) return 8;  // afternoon
-  if (hour >= 18 && hour < 22) return 10; // evening
-  return 12;                              // night
+/* -----------------------------
+   COLOR MUTATIONS
+----------------------------- */
+function swapEyeColors() {
+  [colorState[0], colorState[1]] = [colorState[1], colorState[0]];
+  applyColorState();
 }
 
+function shuffleAllColors() {
+  colorState = shuffle(colors);
+  applyColorState();
+}
 
-// Pixel breakup effect
+/* -----------------------------
+   PIXEL EFFECTS
+----------------------------- */
 function pixelBreak(element) {
   const rect = element.getBoundingClientRect();
-  const pixelSize = getPixelSizeByTime();
+  const pixelSize = 8;
 
   const cols = Math.floor(rect.width / pixelSize);
   const rows = Math.floor(rect.height / pixelSize);
@@ -58,34 +87,15 @@ function pixelBreak(element) {
     p.style.height = pixelSize + "px";
     clone.appendChild(p);
 
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       const x = (Math.random() - 0.5) * 40;
       const y = (Math.random() - 0.5) * 40;
       p.style.transform = `translate(${x}px, ${y}px)`;
       p.style.opacity = 0;
-    }, 20);
+    });
   }
 
   setTimeout(() => clone.remove(), 700);
-}
-
-// Assign system state
-function assignRandomState() {
-  const shuffledLinks = shuffle(links);
-  applyColors(shuffle(colors));
-
-  buttons.forEach((btn, index) => {
-    btn.onclick = () => {
-      pixelBreak(btn);          // break button
-      screenPixelate();         // whole screen pixelates
-      applyColors(shuffle(colors)); // calm color shift
-
-      setTimeout(() => {
-        window.open(shuffledLinks[index], "_blank");
-        assignRandomState();
-      }, 700);
-    };
-  });
 }
 
 function screenPixelate() {
@@ -93,30 +103,75 @@ function screenPixelate() {
   overlay.className = "screen-pixelate";
   document.body.appendChild(overlay);
 
-  // Fade in
   requestAnimationFrame(() => {
     overlay.style.opacity = 1;
   });
 
-  // Fade out
   setTimeout(() => {
     overlay.style.opacity = 0;
   }, 300);
 
-  // Cleanup
-  setTimeout(() => {
-    overlay.remove();
-  }, 700);
+  setTimeout(() => overlay.remove(), 700);
 }
 
-const leftEye = document.getElementById("btn1");
-const rightEye = document.getElementById("btn2");
 
-function triggerBlink(targets) {
-  targets.forEach(eye => eye.classList.add("blink"));
+/* -----------------------------
+   CLICK BEHAVIOR (PIXELS + DELAY)
+----------------------------- */
+leftEye.addEventListener("click", () => {
+  pixelBreak(leftEye);
+  screenPixelate();
+  shuffleAllColors();
 
   setTimeout(() => {
-    targets.forEach(eye => eye.classList.remove("blink"));
+    window.open(links[0], "_blank");
+  }, 450);
+});
+
+rightEye.addEventListener("click", () => {
+  pixelBreak(rightEye);
+  screenPixelate();
+  shuffleAllColors();
+
+  setTimeout(() => {
+    window.open(links[1], "_blank");
+  }, 450);
+});
+
+exploreBtn.addEventListener("click", () => {
+  pixelBreak(exploreBtn);
+  screenPixelate();
+  shuffleAllColors();
+
+  setTimeout(() => {
+    const randomLink = shuffle(links)[0];
+    window.open(randomLink, "_blank");
+  }, 450);
+});
+
+/* -----------------------------
+   BLINK LOGIC (ATOMIC)
+----------------------------- */
+let blinkInProgress = false;
+
+function triggerBlink(targets, mode) {
+  if (blinkInProgress) return;
+  blinkInProgress = true;
+
+  targets.forEach(el => el.classList.add("blink"));
+
+  setTimeout(() => {
+    targets.forEach(el => el.classList.remove("blink"));
+
+    if (mode === "single") {
+      swapEyeColors();
+    }
+
+    if (mode === "both") {
+      shuffleAllColors(); // ✅ THIS NOW ALWAYS AFFECTS MOUTH
+    }
+
+    blinkInProgress = false;
   }, 220);
 }
 
@@ -124,20 +179,16 @@ function randomBlink() {
   const r = Math.random();
 
   if (r < 0.33) {
-    triggerBlink([leftEye]);        // left only
+    triggerBlink([leftEye], "single");
   } else if (r < 0.66) {
-    triggerBlink([rightEye]);       // right only
+    triggerBlink([rightEye], "single");
   } else {
-    triggerBlink([leftEye, rightEye]); // both
+    triggerBlink([leftEye, rightEye], "both");
   }
 
-  // schedule next blink (calm, irregular)
-  const nextBlink = 3000 + Math.random() * 4000;
-  setTimeout(randomBlink, nextBlink);
+  const next = 3000 + Math.random() * 4000;
+  setTimeout(randomBlink, next);
 }
 
 // start blinking
 setTimeout(randomBlink, 2000);
-
-// Init
-assignRandomState();

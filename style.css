@@ -109,11 +109,12 @@ body {
 
 /* Pixel container */
 .pixel-clone {
-  position: absolute;
+  position: fixed;
   display: grid;
   pointer-events: none;
-  z-index: 999;
+  z-index: 9999;
 }
+
 
 /* Individual pixels */
 .pixel {
