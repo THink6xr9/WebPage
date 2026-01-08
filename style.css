@@ -1,0 +1,73 @@
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Full screen green background */
+body {
+  background: #6cc56c;
+}
+
+/* Main container */
+.inner-panel {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* Top buttons (eyes) */
+.top-inputs {
+  position: absolute;
+  top: 12%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10vw;
+}
+
+.eye {
+  background: white;
+  border: none;
+  width: 180px;
+  height: 50px;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.eye.left {
+  color: red;
+}
+
+.eye.right {
+  color: blue;
+}
+
+/* Explore button */
+.mouth {
+  position: absolute;
+  bottom: 22%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: none;
+  width: 320px;
+  height: 70px;
+  font-size: 32px;
+  color: yellow;
+  cursor: pointer;
+}
+
+/* Colors will now come from JavaScript */
+.eye, .mouth {
+  background: white;
+  border: none;
+  cursor: pointer;
+}
+
