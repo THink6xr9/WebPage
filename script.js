@@ -21,10 +21,20 @@ function applyColors(colorSet) {
   buttons.forEach((btn, i) => btn.style.color = colorSet[i]);
 }
 
+function getPixelSizeByTime() {
+  const hour = new Date().getHours();
+
+  if (hour >= 6 && hour < 12) return 6;   // morning
+  if (hour >= 12 && hour < 18) return 8;  // afternoon
+  if (hour >= 18 && hour < 22) return 10; // evening
+  return 12;                              // night
+}
+
+
 // Pixel breakup effect
 function pixelBreak(element) {
   const rect = element.getBoundingClientRect();
-  const pixelSize = 8;
+  const pixelSize = getPixelSizeByTime();
 
   const cols = Math.floor(rect.width / pixelSize);
   const rows = Math.floor(rect.height / pixelSize);
@@ -67,6 +77,7 @@ function assignRandomState() {
   buttons.forEach((btn, index) => {
     btn.onclick = () => {
       pixelBreak(btn);          // break button
+      screenPixelate();         // whole screen pixelates
       applyColors(shuffle(colors)); // calm color shift
 
       setTimeout(() => {
@@ -76,6 +87,28 @@ function assignRandomState() {
     };
   });
 }
+
+function screenPixelate() {
+  const overlay = document.createElement("div");
+  overlay.className = "screen-pixelate";
+  document.body.appendChild(overlay);
+
+  // Fade in
+  requestAnimationFrame(() => {
+    overlay.style.opacity = 1;
+  });
+
+  // Fade out
+  setTimeout(() => {
+    overlay.style.opacity = 0;
+  }, 300);
+
+  // Cleanup
+  setTimeout(() => {
+    overlay.remove();
+  }, 700);
+}
+
 
 // Init
 assignRandomState();

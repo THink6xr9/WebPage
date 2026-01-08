@@ -71,10 +71,6 @@ body {
   cursor: pointer;
 }
 
-.eye, .mouth {
-  transition: color 0.6s ease;
-}
-
 /* Pixelated effect */
 .pixelate {
   filter: contrast(200%) saturate(80%);
@@ -106,5 +102,53 @@ body {
     transform 0.6s ease,
     opacity 0.6s ease;
 }
+
+/* Full screen pixel overlay */
+.screen-pixelate {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: inherit;
+  pointer-events: none;
+  z-index: 998;
+  opacity: 0;
+  filter: contrast(180%) saturate(90%);
+  image-rendering: pixelated;
+  transition: opacity 0.6s ease;
+}
+
+/* Tear containers aligned to eye centers */
+.tears {
+  position: absolute;
+  top: calc(12% + 50px + 84px); /* below button */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Center under left eye */
+.tears.left {
+  left: calc(10vw + 90px); /* matches left eye center */
+  transform: translateX(-50%);
+}
+
+/* Center under right eye */
+.tears.right {
+  right: calc(10vw + 90px); /* matches right eye center */
+  transform: translateX(50%);
+}
+
+/* Tear drop shape */
+/* Square markers */
+.tear {
+  width: 29px;
+  height: 29px;
+  background: #000;   /* filled hole */
+  border: none;       /* no outline */
+  opacity: 0.85;      /* slightly softer than pure black */
+}
+
 
 
