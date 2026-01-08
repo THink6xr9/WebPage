@@ -5,50 +5,77 @@ const links = [
 ];
 
 const colors = ["red", "blue", "yellow"];
-
 const buttons = [
   document.getElementById("btn1"),
   document.getElementById("btn2"),
   document.getElementById("btn3")
 ];
 
-// Fisher–Yates shuffle (stable randomness)
+// Shuffle helper
 function shuffle(array) {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
+  return [...array].sort(() => Math.random() - 0.5);
 }
 
+// Apply colors
 function applyColors(colorSet) {
-  buttons.forEach((btn, index) => {
-    btn.style.color = colorSet[index];
-  });
+  buttons.forEach((btn, i) => btn.style.color = colorSet[i]);
 }
 
+// Pixel breakup effect
+function pixelBreak(element) {
+  const rect = element.getBoundingClientRect();
+  const pixelSize = 8;
+
+  const cols = Math.floor(rect.width / pixelSize);
+  const rows = Math.floor(rect.height / pixelSize);
+
+  const clone = document.createElement("div");
+  clone.className = "pixel-clone";
+  clone.style.left = rect.left + "px";
+  clone.style.top = rect.top + "px";
+  clone.style.width = rect.width + "px";
+  clone.style.height = rect.height + "px";
+  clone.style.gridTemplateColumns = `repeat(${cols}, ${pixelSize}px)`;
+  clone.style.gridTemplateRows = `repeat(${rows}, ${pixelSize}px)`;
+  clone.style.color = getComputedStyle(element).color;
+
+  document.body.appendChild(clone);
+
+  for (let i = 0; i < cols * rows; i++) {
+    const p = document.createElement("div");
+    p.className = "pixel";
+    p.style.width = pixelSize + "px";
+    p.style.height = pixelSize + "px";
+    clone.appendChild(p);
+
+    setTimeout(() => {
+      const x = (Math.random() - 0.5) * 40;
+      const y = (Math.random() - 0.5) * 40;
+      p.style.transform = `translate(${x}px, ${y}px)`;
+      p.style.opacity = 0;
+    }, 20);
+  }
+
+  setTimeout(() => clone.remove(), 700);
+}
+
+// Assign system state
 function assignRandomState() {
   const shuffledLinks = shuffle(links);
-  const shuffledColors = shuffle(colors);
-
-  applyColors(shuffledColors);
+  applyColors(shuffle(colors));
 
   buttons.forEach((btn, index) => {
     btn.onclick = () => {
-      // 1. shuffle colors immediately
-      applyColors(shuffle(colors));
+      pixelBreak(btn);          // break button
+      applyColors(shuffle(colors)); // calm color shift
 
-      // 2. slight pause, then redirect
       setTimeout(() => {
         window.open(shuffledLinks[index], "_blank");
-
-        // 3. prepare next state
         assignRandomState();
-      }, 250);
+      }, 700);
     };
   });
 }
 
-// Initial state
+// Init
 assignRandomState();

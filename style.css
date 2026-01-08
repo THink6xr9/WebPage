@@ -71,3 +71,40 @@ body {
   cursor: pointer;
 }
 
+.eye, .mouth {
+  transition: color 0.6s ease;
+}
+
+/* Pixelated effect */
+.pixelate {
+  filter: contrast(200%) saturate(80%);
+  image-rendering: pixelated;
+  transform: scale(1.02);
+}
+
+/* Calm transition */
+.eye, .mouth {
+  transition: 
+    color 0.6s ease,
+    filter 0.3s steps(4),
+    transform 0.3s ease;
+}
+
+/* Pixel container */
+.pixel-clone {
+  position: absolute;
+  display: grid;
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* Individual pixels */
+.pixel {
+  background: currentColor;
+  opacity: 1;
+  transition:
+    transform 0.6s ease,
+    opacity 0.6s ease;
+}
+
+
