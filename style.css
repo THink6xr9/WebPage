@@ -251,8 +251,9 @@ body {
 /* Configurator icon */
 #configBtn {
   position: fixed;
-  right: 16px;
-  bottom: 16px;
+  right: calc(16px + env(safe-area-inset-right));
+  bottom: calc(16px + env(safe-area-inset-bottom));
+
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -265,6 +266,14 @@ body {
 
   opacity: 0.5;
   transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+@media (max-width: 768px) {
+  #configBtn {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
 }
 
 #configBtn:hover {
