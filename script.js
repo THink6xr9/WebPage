@@ -191,7 +191,7 @@ function randomBlink() {
 }
 
 /* -----------------------------
-   TEAR LINKS
+   TEAR LINKS (MEMORY RANDOM)
 ----------------------------- */
 const tearLinks = [
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/27",
@@ -204,16 +204,28 @@ const tearLinks = [
   "https://medium.com/@qmbgjhq/false-prophecy-to-truth-cab69298b39a"
 ];
 
+// working memory pool
+let tearPool = shuffle(tearLinks);
+
 document.querySelectorAll(".tear").forEach(tear => {
   tear.style.cursor = "pointer";
 
   tear.addEventListener("click", () => {
-    const randomLink = tearLinks[
-      Math.floor(Math.random() * tearLinks.length)
-    ];
+    // reset pool if exhausted
+    if (tearPool.length === 0) {
+      tearPool = shuffle(tearLinks);
+    }
 
-    window.open(randomLink, "_blank");
+    const nextLink = tearPool.pop();
+    window.open(nextLink, "_blank");
   });
+});
+
+const configBtn = document.getElementById("configBtn");
+
+configBtn.addEventListener("click", () => {
+  // placeholder for future configurator
+  console.log("Configurator opened");
 });
 
 
