@@ -208,12 +208,11 @@ document.querySelectorAll(".tear").forEach(tear => {
   tear.style.cursor = "pointer";
 
   tear.addEventListener("click", () => {
-    const index = parseInt(tear.dataset.link, 10);
-    const url = tearLinks[index];
+    const randomLink = tearLinks[
+      Math.floor(Math.random() * tearLinks.length)
+    ];
 
-    if (url) {
-      window.open(url, "_blank");
-    }
+    window.open(randomLink, "_blank");
   });
 });
 
