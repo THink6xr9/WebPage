@@ -222,11 +222,23 @@ document.querySelectorAll(".tear").forEach(tear => {
 });
 
 const configBtn = document.getElementById("configBtn");
+const configHelp = document.getElementById("configHelp");
+
+let helpVisible = false;
 
 configBtn.addEventListener("click", () => {
-  // placeholder for future configurator
-  console.log("Configurator opened");
+  helpVisible = !helpVisible;
+  configHelp.classList.toggle("show", helpVisible);
+
+  // auto-hide after 2 seconds
+  if (helpVisible) {
+    setTimeout(() => {
+      configHelp.classList.remove("show");
+      helpVisible = false;
+    }, 2000);
+  }
 });
+
 
 
 // start blinking

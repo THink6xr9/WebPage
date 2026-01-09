@@ -280,3 +280,29 @@ body {
   opacity: 1;
   transform: rotate(20deg);
 }
+
+/* Configurator help text */
+.config-help {
+  position: fixed;
+  right: calc(16px + env(safe-area-inset-right));
+  bottom: calc(64px + env(safe-area-inset-bottom));
+
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+
+  z-index: 10001;
+}
+
+/* Visible state */
+.config-help.show {
+  opacity: 1;
+  transform: translateY(0);
+}
