@@ -190,5 +190,33 @@ function randomBlink() {
   setTimeout(randomBlink, next);
 }
 
+/* -----------------------------
+   TEAR LINKS
+----------------------------- */
+const tearLinks = [
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/27",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/53",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/173",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/28",
+  "https://medium.com/@qmbgjhq/title-when-force-meets-flow-d8baed6d5020",
+  "https://medium.com/@qmbgjhq/the-invertible-mind-3225a7ac2b69",
+  "https://medium.com/@qmbgjhq/truth-of-scale-45c57c90ed7b",
+  "https://medium.com/@qmbgjhq/false-prophecy-to-truth-cab69298b39a"
+];
+
+document.querySelectorAll(".tear").forEach(tear => {
+  tear.style.cursor = "pointer";
+
+  tear.addEventListener("click", () => {
+    const index = parseInt(tear.dataset.link, 10);
+    const url = tearLinks[index];
+
+    if (url) {
+      window.open(url, "_blank");
+    }
+  });
+});
+
+
 // start blinking
 setTimeout(randomBlink, 2000);
