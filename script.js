@@ -191,49 +191,12 @@ function randomBlink() {
 }
 
 /* -----------------------------
-   TEAR LINKS (MEMORY RANDOM)
+   TEAR FEATURE INTEGRATION
 ----------------------------- */
-const tearLinks = [
+window.TEAR_LINKS = [
   ...window.OPEN_SEA_LINKS,
   ...window.MEDIUM_LINKS
 ];
-
-// working memory pool
-let tearPool = shuffle(tearLinks);
-
-document.querySelectorAll(".tear").forEach(tear => {
-  tear.style.cursor = "pointer";
-
-  tear.addEventListener("click", () => {
-    // reset pool if exhausted
-    if (tearPool.length === 0) {
-      tearPool = shuffle(tearLinks);
-    }
-
-    const nextLink = tearPool.pop();
-    window.open(nextLink, "_blank");
-  });
-});
-
-const configBtn = document.getElementById("configBtn");
-const configHelp = document.getElementById("configHelp");
-
-let helpVisible = false;
-
-configBtn.addEventListener("click", () => {
-  helpVisible = !helpVisible;
-  configHelp.classList.toggle("show", helpVisible);
-
-  // auto-hide after 2 seconds
-  if (helpVisible) {
-    setTimeout(() => {
-      configHelp.classList.remove("show");
-      helpVisible = false;
-    }, 2000);
-  }
-});
-
-
 
 // start blinking
 setTimeout(randomBlink, 2000);
