@@ -2,9 +2,12 @@
 
 window.MEDIUM_LINKS = [
   "https://medium.com/@qmbgjhq/title-when-force-meets-flow-d8baed6d5020",
-  "https://medium.com/@qmbgjhq/the-invertible-mind-3225a7ac2b69",
-  "https://medium.com/@qmbgjhq/truth-of-scale-45c57c90ed7b",
-  "https://medium.com/@qmbgjhq/false-prophecy-to-truth-cab69298b39a"
+  "https://medium.com/@qmbgjhq/point-of-truth-the-love-4e2116782d5e",
+
+  //Untitled collection and intial links
+  "https://medium.com/@qmbgjhq/the-invertible-mind-3225a7ac2b69", //Untitled collection
+  "https://medium.com/@qmbgjhq/truth-of-scale-45c57c90ed7b",  //Untitled collection
+  "https://medium.com/@qmbgjhq/false-prophecy-to-truth-cab69298b39a" //Untitled collection
 
   // add future essays here
 ];
