@@ -191,37 +191,12 @@ function randomBlink() {
 }
 
 /* -----------------------------
-   TEAR LINKS (MEMORY RANDOM)
+   TEAR FEATURE INTEGRATION
 ----------------------------- */
-const tearLinks = [
+window.TEAR_LINKS = [
   ...window.OPEN_SEA_LINKS,
   ...window.MEDIUM_LINKS
 ];
-
-// working memory pool
-let tearPool = shuffle(tearLinks);
-
-document.querySelectorAll(".tear").forEach(tear => {
-  tear.style.cursor = "pointer";
-
-  tear.addEventListener("click", () => {
-    // reset pool if exhausted
-    if (tearPool.length === 0) {
-      tearPool = shuffle(tearLinks);
-    }
-
-    const nextLink = tearPool.pop();
-    window.open(nextLink, "_blank");
-  });
-});
-
-const configBtn = document.getElementById("configBtn");
-
-configBtn.addEventListener("click", () => {
-  // placeholder for future configurator
-  console.log("Configurator opened");
-});
-
 
 // start blinking
 setTimeout(randomBlink, 2000);
