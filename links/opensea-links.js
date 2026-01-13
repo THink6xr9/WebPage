@@ -5,6 +5,7 @@ window.OPEN_SEA_LINKS = [
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/3",
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/4",
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/5",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/6",
   
   //need to be added in images folder and intial links
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/27",//need to be added in images folder

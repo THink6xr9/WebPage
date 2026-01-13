@@ -5,6 +5,7 @@ window.MEDIUM_LINKS = [
   "https://medium.com/@qmbgjhq/point-of-truth-the-love-4e2116782d5e",
   "https://medium.com/@qmbgjhq/the-light-within-the-broken-heart-b890fc22f5ba",
   "https://medium.com/@qmbgjhq/the-awakening-man-threefold-mind-500e8ffb5ea3",
+  "https://medium.com/@qmbgjhq/the-awakening-man-acceptance-ef2d35bcf3d0",
 
   //Untitled collection and intial links
   "https://medium.com/@qmbgjhq/the-invertible-mind-3225a7ac2b69", //Untitled collection
