@@ -94,3 +94,17 @@
     padding: 14px;
   }
 }
+
+/* Locked (all look same) */
+.config-color.locked {
+  background: #cfcfcf;   /* neutral */
+  border: 2px solid #999;
+  opacity: 1;
+  filter: none;
+  cursor: not-allowed;
+}
+
+/* Hide color when locked */
+.config-color.locked::after {
+  content: "";
+}

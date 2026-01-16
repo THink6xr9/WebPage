@@ -21,6 +21,10 @@
     if (!tears.length) return;
 
     function openRandomTearLink() {
+      window.INTERACTION_STATE.totalClicks++;
+      window.INTERACTION_STATE.tearClicks++;
+      updateConfiguratorColors();
+
       if (!window.TEAR_LINKS || window.TEAR_LINKS.length === 0) return;
 
       const link =

@@ -37,6 +37,12 @@ const GREEN = "#6cc56c";
     // Handle color swap
     colorSquares.forEach(square => {
       square.addEventListener("click", () => {
+
+          if (!window.isConfiguratorUnlocked()) {
+            showConfiguratorHint(window.remainingClicksInfo());
+            return;
+          }
+
         const clickedColor = square.dataset.color;
         swapBackgroundColor(clickedColor);
         
@@ -76,23 +82,49 @@ const GREEN = "#6cc56c";
 }
 
 
-  function updateConfiguratorColors() {
+  window.updateConfiguratorColors = function () {
   const squares = document.querySelectorAll(".config-color:not(.coming-soon)");
+  const unlocked = window.isConfiguratorUnlocked();
 
   squares.forEach((square, index) => {
-    const color = window.faceColors[index];
+    square.className = "config-color"; // reset everything
 
-    if (!color) {
-      square.className = "config-color";
-      square.style.background = "transparent";
+    if (!unlocked) {
+      // LOCKED: all identical
+      square.classList.add("locked");
+      square.style.background = "#cfcfcf";
       square.dataset.color = "";
       return;
     }
 
-    square.className = `config-color ${color}`;
+    // UNLOCKED: reveal real colors
+    const color = window.faceColors[index];
+    if (!color) return;
+
+    square.classList.remove("locked");
+    square.classList.add(color);
     square.style.background = color;
     square.dataset.color = color;
   });
+};
+
+
+
+let hintTimeout = null;
+
+function showConfiguratorHint(text) {
+  const hint = document.getElementById("configHelp");
+  if (!hint) return;
+
+  hint.textContent = text;
+  hint.classList.add("show");
+
+  clearTimeout(hintTimeout);
+  hintTimeout = setTimeout(() => {
+    hint.classList.remove("show");
+  }, 1500);
 }
+
+window.updateConfiguratorColors();
 
 })();

@@ -124,6 +124,8 @@ function screenPixelate() {
    CLICK BEHAVIOR (PIXELS + DELAY)
 ----------------------------- */
 leftEye.addEventListener("click", () => {
+  window.INTERACTION_STATE.totalClicks++;
+  updateConfiguratorColors();
   pixelBreak(leftEye);
   screenPixelate();
   shuffleFaceOrder();
@@ -134,6 +136,8 @@ leftEye.addEventListener("click", () => {
 });
 
 rightEye.addEventListener("click", () => {
+  window.INTERACTION_STATE.totalClicks++;
+  updateConfiguratorColors();
   pixelBreak(rightEye);
   screenPixelate();
   shuffleFaceOrder();
@@ -144,6 +148,8 @@ rightEye.addEventListener("click", () => {
 });
 
 exploreBtn.addEventListener("click", () => {
+  window.INTERACTION_STATE.totalClicks++;
+  updateConfiguratorColors();
   pixelBreak(exploreBtn);
   screenPixelate();
   shuffleFaceOrder();
@@ -220,6 +226,32 @@ configBtn.addEventListener("click", () => {
     }, 2000);
   }
 });
+
+window.INTERACTION_STATE = {
+  totalClicks: 0,
+  tearClicks: 0,
+  requiredTotal: 4,
+  requiredTear: 1
+};
+
+window.isConfiguratorUnlocked = function () {
+  const s = window.INTERACTION_STATE;
+  return s.totalClicks >= s.requiredTotal && s.tearClicks >= s.requiredTear;
+};
+
+window.remainingClicksInfo = function () {
+  const s = window.INTERACTION_STATE;
+
+  const remainingTotal = Math.max(0, s.requiredTotal - s.totalClicks);
+  const remainingTear = Math.max(0, s.requiredTear - s.tearClicks);
+
+  if (remainingTear > 0) {
+    return `Touch the tears (${remainingTear})`;
+  }
+
+  return `${remainingTotal} more interaction${remainingTotal === 1 ? "" : "s"}`;
+};
+
 
 // start blinking
 setTimeout(randomBlink, 2000);
