@@ -35,8 +35,10 @@ function shuffle(array) {
    COLOR STATE (SINGLE SOURCE)
 ----------------------------- */
 // [ left eye, right eye, mouth ]
-window.availableColors = ["red", "blue", "yellow"]; // Will be updated by configurator
-window.colorState = shuffle(window.availableColors);
+window.backgroundColor = GREEN;
+window.faceColors = ["red", "blue", "yellow"];
+window.colorState = [...window.faceColors]; // order only
+
 
 window.applyColorState = function() {
   leftEye.style.color = window.colorState[0];
@@ -44,7 +46,7 @@ window.applyColorState = function() {
   exploreBtn.style.color = window.colorState[2];
   
   // Notify configurator of color change
-  window.dispatchEvent(new Event('colorsUpdated'));
+  //window.dispatchEvent(new Event('colorsUpdated'));
 }
 
 applyColorState();
@@ -54,8 +56,10 @@ function swapEyeColors() {
   window.applyColorState();
 }
 
-function shuffleAllColors() {
-  window.colorState = shuffle(window.availableColors);
+
+function shuffleFaceOrder() {
+  // shuffle ONLY the current face order
+  window.colorState = shuffle(window.colorState);
   window.applyColorState();
 }
 
@@ -122,7 +126,7 @@ function screenPixelate() {
 leftEye.addEventListener("click", () => {
   pixelBreak(leftEye);
   screenPixelate();
-  shuffleAllColors();
+  shuffleFaceOrder();
 
   setTimeout(() => {
     window.open(links[0], "_blank");
@@ -132,7 +136,7 @@ leftEye.addEventListener("click", () => {
 rightEye.addEventListener("click", () => {
   pixelBreak(rightEye);
   screenPixelate();
-  shuffleAllColors();
+  shuffleFaceOrder();
 
   setTimeout(() => {
     window.open(links[1], "_blank");
@@ -142,7 +146,7 @@ rightEye.addEventListener("click", () => {
 exploreBtn.addEventListener("click", () => {
   pixelBreak(exploreBtn);
   screenPixelate();
-  shuffleAllColors();
+  shuffleFaceOrder();
 
   setTimeout(() => {
     const randomLink = shuffle(links)[0];
@@ -169,7 +173,7 @@ function triggerBlink(targets, mode) {
     }
 
     if (mode === "both") {
-      shuffleAllColors(); // ✅ THIS NOW ALWAYS AFFECTS MOUTH
+      shuffleFaceOrder(); // ✅ THIS NOW ALWAYS AFFECTS MOUTH
     }
 
     blinkInProgress = false;
