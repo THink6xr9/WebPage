@@ -3,24 +3,24 @@
   position: fixed;
   right: calc(16px + env(safe-area-inset-right));
   bottom: calc(64px + env(safe-area-inset-bottom));
-  
+
   width: 200px;
   height: 200px;
   background: rgba(255, 255, 255, 0.95);
   border: 3px solid #000;
   border-radius: 8px;
-  
+
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   gap: 12px;
   padding: 16px;
-  
+
   opacity: 0;
   pointer-events: none;
   transform: scale(0.8) translateY(10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
-  
+
   z-index: 9999;
 }
 
@@ -38,7 +38,7 @@
   border-radius: 6px;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,10 +97,10 @@
 
 /* Locked (all look same) */
 .config-color.locked {
-  background: #cfcfcf;   /* neutral */
+  background: #cfcfcf;              /* neutral for pre-unlock */
   border: 2px solid #999;
-  opacity: 1;
-  filter: none;
+  opacity: 0.35;
+  filter: grayscale(100%);
   cursor: not-allowed;
 }
 

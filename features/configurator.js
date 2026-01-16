@@ -23,8 +23,8 @@ const GREEN = "#6cc56c";
     const colorSquares = document.querySelectorAll(".config-color:not(.coming-soon)");
 
     // Track current background color and all available colors
-    window.currentBgColor = GREEN;
-    window.allColors = ["red", "blue", "yellow", GREEN];
+    //window.currentBgColor = GREEN;
+    //window.allColors = ["red", "blue", "yellow", GREEN];
 
     let panelVisible = false;
 
@@ -38,93 +38,129 @@ const GREEN = "#6cc56c";
     colorSquares.forEach(square => {
       square.addEventListener("click", () => {
 
-          if (!window.isConfiguratorUnlocked()) {
-            showConfiguratorHint(window.remainingClicksInfo());
+        // FIRST: if unlocked, NEVER show hint
+        if (window.isConfiguratorUnlocked()) {
+
+          // block only the background-locked color
+          if (square.classList.contains("locked")) {
             return;
           }
 
-        const clickedColor = square.dataset.color;
-        swapBackgroundColor(clickedColor);
-        
-        // Close panel after selection
-        panelVisible = false;
-        configPanel.classList.remove("show");
+          const clickedColor = square.dataset.color;
+          if (!clickedColor) return;
+
+          swapBackgroundColor(clickedColor);
+          panelVisible = false;
+          configPanel.classList.remove("show");
+          return;
+        }
+
+        // ONLY if still locked
+        showConfiguratorHint(window.remainingClicksInfo());
       });
     });
 
     // Initialize configurator colors
-    updateConfiguratorColors();
-    
+    window.updateConfiguratorColors();
+
     // Listen for color changes
     //window.addEventListener('colorsUpdated', updateConfiguratorColors);
   }
 
   function swapBackgroundColor(clickedColor) {
-  if (!window.faceColors.includes(clickedColor)) return;
+    if (!window.faceColors.includes(clickedColor)) return;
 
-  const oldBg = window.backgroundColor;
+    const oldBg = window.backgroundColor;
+    window.lockedConfiguratorColor = oldBg;
 
-  // Remove clicked color from face
-  window.faceColors = window.faceColors.filter(c => c !== clickedColor);
 
-  // Add old background into face
-  window.faceColors.push(oldBg);
+    // Remove clicked color from face
+    window.faceColors = window.faceColors.filter(c => c !== clickedColor);
 
-  // Set new background
-  window.backgroundColor = clickedColor;
-  document.body.style.background = clickedColor;
+    // Add old background into face
+    window.faceColors.push(oldBg);
 
-  // Reset face order to membership (no shuffle here)
-  window.colorState = [...window.faceColors];
+    // Set new background
+    window.backgroundColor = clickedColor;
+    document.body.style.background = clickedColor;
 
-  window.applyColorState();
-  updateConfiguratorColors();
-}
+    // Reset face order to membership (no shuffle here)
+    window.colorState = [...window.faceColors];
+
+    window.applyColorState();
+    updateConfiguratorColors();
+  }
 
 
   window.updateConfiguratorColors = function () {
-  const squares = document.querySelectorAll(".config-color:not(.coming-soon)");
-  const unlocked = window.isConfiguratorUnlocked();
+    const squares = document.querySelectorAll(".config-color:not(.coming-soon)");
+    const unlocked = window.isConfiguratorUnlocked();
 
-  squares.forEach((square, index) => {
-    square.className = "config-color"; // reset everything
+    squares.forEach((square, index) => {
+      square.className = "config-color"; // reset everything
 
-    if (!unlocked) {
-      // LOCKED: all identical
-      square.classList.add("locked");
-      square.style.background = "#cfcfcf";
-      square.dataset.color = "";
-      return;
-    }
+      if (!unlocked) {
+        // LOCKED: all identical
+        square.classList.add("locked");
+        square.style.background = "#cfcfcf";
+        square.dataset.color = "";
+        return;
+      }
 
-    // UNLOCKED: reveal real colors
-    const color = window.faceColors[index];
-    if (!color) return;
+      // UNLOCKED: reveal real colors
+      square.classList.remove("locked");
+      const color = window.faceColors[index];
+      if (!color) return;
 
-    square.classList.remove("locked");
-    square.classList.add(color);
-    square.style.background = color;
-    square.dataset.color = color;
-  });
-};
+      square.classList.add(color);
+      square.style.background = color;
+      square.dataset.color = color;
+
+      if (color === window.lockedConfiguratorColor) {
+        square.classList.add("locked");
+      } else {
+        square.classList.remove("locked");
+      }
+
+      if (window.isConfiguratorUnlocked()) {
+        const hint = document.getElementById("configHelp");
+        if (hint) hint.classList.remove("show");
+      }
+
+
+    });
+  };
 
 
 
-let hintTimeout = null;
+  let hintTimeout = null;
 
-function showConfiguratorHint(text) {
-  const hint = document.getElementById("configHelp");
-  if (!hint) return;
+  function showConfiguratorHint(text) {
+    if (window.isConfiguratorUnlocked()) return;
 
-  hint.textContent = text;
-  hint.classList.add("show");
+    const hint = document.getElementById("configHelp");
+    if (!hint) return;
 
-  clearTimeout(hintTimeout);
-  hintTimeout = setTimeout(() => {
-    hint.classList.remove("show");
-  }, 1500);
-}
+    hint.textContent = text;
+    hint.classList.add("show");
 
-window.updateConfiguratorColors();
+    clearTimeout(hintTimeout);
+    hintTimeout = setTimeout(() => {
+      hint.classList.remove("show");
+    }, 1500);
+  }
+
+
+  window.updateConfiguratorColors();
+
+  window.incrementInteraction = function ({ tear = false } = {}) {
+    if (window.isConfiguratorUnlocked()) return;
+
+    window.INTERACTION_STATE.totalClicks++;
+    if (tear) window.INTERACTION_STATE.tearClicks++;
+
+    window.updateConfiguratorColors();
+  };
+
 
 })();

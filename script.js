@@ -8,11 +8,6 @@ const links = [
 ];
 
 /* -----------------------------
-   COLORS (UNIQUE)
------------------------------ */
-const colors = ["red", "blue", "yellow"];
-
-/* -----------------------------
    ELEMENTS
 ----------------------------- */
 const leftEye = document.getElementById("btn1");
@@ -38,15 +33,15 @@ function shuffle(array) {
 window.backgroundColor = GREEN;
 window.faceColors = ["red", "blue", "yellow"];
 window.colorState = [...window.faceColors]; // order only
+window.lockedConfiguratorColor = null;
 
 
-window.applyColorState = function() {
+
+window.applyColorState = function () {
   leftEye.style.color = window.colorState[0];
   rightEye.style.color = window.colorState[1];
   exploreBtn.style.color = window.colorState[2];
-  
-  // Notify configurator of color change
-  //window.dispatchEvent(new Event('colorsUpdated'));
+
 }
 
 applyColorState();
@@ -124,8 +119,7 @@ function screenPixelate() {
    CLICK BEHAVIOR (PIXELS + DELAY)
 ----------------------------- */
 leftEye.addEventListener("click", () => {
-  window.INTERACTION_STATE.totalClicks++;
-  updateConfiguratorColors();
+  window.incrementInteraction();
   pixelBreak(leftEye);
   screenPixelate();
   shuffleFaceOrder();
@@ -136,8 +130,7 @@ leftEye.addEventListener("click", () => {
 });
 
 rightEye.addEventListener("click", () => {
-  window.INTERACTION_STATE.totalClicks++;
-  updateConfiguratorColors();
+  window.incrementInteraction();
   pixelBreak(rightEye);
   screenPixelate();
   shuffleFaceOrder();
@@ -148,8 +141,7 @@ rightEye.addEventListener("click", () => {
 });
 
 exploreBtn.addEventListener("click", () => {
-  window.INTERACTION_STATE.totalClicks++;
-  updateConfiguratorColors();
+  window.incrementInteraction();
   pixelBreak(exploreBtn);
   screenPixelate();
   shuffleFaceOrder();
@@ -209,23 +201,6 @@ window.TEAR_LINKS = [
   ...window.MEDIUM_LINKS
 ];
 
-const configBtn = document.getElementById("configBtn");
-const configHelp = document.getElementById("configHelp");
-
-let helpVisible = false;
-
-configBtn.addEventListener("click", () => {
-  helpVisible = !helpVisible;
-  configHelp.classList.toggle("show", helpVisible);
-
-  // auto-hide after 2 seconds
-  if (helpVisible) {
-    setTimeout(() => {
-      configHelp.classList.remove("show");
-      helpVisible = false;
-    }, 2000);
-  }
-});
 
 window.INTERACTION_STATE = {
   totalClicks: 0,

@@ -21,9 +21,7 @@
     if (!tears.length) return;
 
     function openRandomTearLink() {
-      window.INTERACTION_STATE.totalClicks++;
-      window.INTERACTION_STATE.tearClicks++;
-      updateConfiguratorColors();
+      window.incrementInteraction({ tear: true });
 
       if (!window.TEAR_LINKS || window.TEAR_LINKS.length === 0) return;
 
@@ -32,6 +30,7 @@
 
       window.open(link, "_blank");
     }
+
 
     tears.forEach(tear => {
       tear.style.cursor = "pointer";
