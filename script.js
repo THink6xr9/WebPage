@@ -35,27 +35,28 @@ function shuffle(array) {
    COLOR STATE (SINGLE SOURCE)
 ----------------------------- */
 // [ left eye, right eye, mouth ]
-let colorState = shuffle(colors);
+window.availableColors = ["red", "blue", "yellow"]; // Will be updated by configurator
+window.colorState = shuffle(window.availableColors);
 
-function applyColorState() {
-  leftEye.style.color = colorState[0];
-  rightEye.style.color = colorState[1];
-  exploreBtn.style.color = colorState[2];
+window.applyColorState = function() {
+  leftEye.style.color = window.colorState[0];
+  rightEye.style.color = window.colorState[1];
+  exploreBtn.style.color = window.colorState[2];
+  
+  // Notify configurator of color change
+  window.dispatchEvent(new Event('colorsUpdated'));
 }
 
 applyColorState();
 
-/* -----------------------------
-   COLOR MUTATIONS
------------------------------ */
 function swapEyeColors() {
-  [colorState[0], colorState[1]] = [colorState[1], colorState[0]];
-  applyColorState();
+  [window.colorState[0], window.colorState[1]] = [window.colorState[1], window.colorState[0]];
+  window.applyColorState();
 }
 
 function shuffleAllColors() {
-  colorState = shuffle(colors);
-  applyColorState();
+  window.colorState = shuffle(window.availableColors);
+  window.applyColorState();
 }
 
 /* -----------------------------
