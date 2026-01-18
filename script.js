@@ -8,11 +8,6 @@ const links = [
 ];
 
 /* -----------------------------
-   COLORS (UNIQUE)
------------------------------ */
-const colors = ["red", "blue", "yellow"];
-
-/* -----------------------------
    ELEMENTS
 ----------------------------- */
 const leftEye = document.getElementById("btn1");
@@ -35,27 +30,32 @@ function shuffle(array) {
    COLOR STATE (SINGLE SOURCE)
 ----------------------------- */
 // [ left eye, right eye, mouth ]
-let colorState = shuffle(colors);
+window.backgroundColor = GREEN;
+window.faceColors = ["red", "blue", "yellow"];
+window.colorState = [...window.faceColors]; // order only
+window.lockedConfiguratorColor = null;
 
-function applyColorState() {
-  leftEye.style.color = colorState[0];
-  rightEye.style.color = colorState[1];
-  exploreBtn.style.color = colorState[2];
+
+
+window.applyColorState = function () {
+  leftEye.style.color = window.colorState[0];
+  rightEye.style.color = window.colorState[1];
+  exploreBtn.style.color = window.colorState[2];
+
 }
 
 applyColorState();
 
-/* -----------------------------
-   COLOR MUTATIONS
------------------------------ */
 function swapEyeColors() {
-  [colorState[0], colorState[1]] = [colorState[1], colorState[0]];
-  applyColorState();
+  [window.colorState[0], window.colorState[1]] = [window.colorState[1], window.colorState[0]];
+  window.applyColorState();
 }
 
-function shuffleAllColors() {
-  colorState = shuffle(colors);
-  applyColorState();
+
+function shuffleFaceOrder() {
+  // shuffle ONLY the current face order
+  window.colorState = shuffle(window.colorState);
+  window.applyColorState();
 }
 
 /* -----------------------------
@@ -119,9 +119,10 @@ function screenPixelate() {
    CLICK BEHAVIOR (PIXELS + DELAY)
 ----------------------------- */
 leftEye.addEventListener("click", () => {
+  window.incrementInteraction();
   pixelBreak(leftEye);
   screenPixelate();
-  shuffleAllColors();
+  shuffleFaceOrder();
 
   setTimeout(() => {
     window.open(links[0], "_blank");
@@ -129,9 +130,10 @@ leftEye.addEventListener("click", () => {
 });
 
 rightEye.addEventListener("click", () => {
+  window.incrementInteraction();
   pixelBreak(rightEye);
   screenPixelate();
-  shuffleAllColors();
+  shuffleFaceOrder();
 
   setTimeout(() => {
     window.open(links[1], "_blank");
@@ -139,9 +141,10 @@ rightEye.addEventListener("click", () => {
 });
 
 exploreBtn.addEventListener("click", () => {
+  window.incrementInteraction();
   pixelBreak(exploreBtn);
   screenPixelate();
-  shuffleAllColors();
+  shuffleFaceOrder();
 
   setTimeout(() => {
     const randomLink = shuffle(links)[0];
@@ -168,7 +171,7 @@ function triggerBlink(targets, mode) {
     }
 
     if (mode === "both") {
-      shuffleAllColors(); // ✅ THIS NOW ALWAYS AFFECTS MOUTH
+      shuffleFaceOrder(); // ✅ THIS NOW ALWAYS AFFECTS MOUTH
     }
 
     blinkInProgress = false;
@@ -198,23 +201,32 @@ window.TEAR_LINKS = [
   ...window.MEDIUM_LINKS
 ];
 
-const configBtn = document.getElementById("configBtn");
-const configHelp = document.getElementById("configHelp");
 
-let helpVisible = false;
+window.INTERACTION_STATE = {
+  totalClicks: 0,
+  tearClicks: 0,
+  requiredTotal: 4,
+  requiredTear: 1
+};
 
-configBtn.addEventListener("click", () => {
-  helpVisible = !helpVisible;
-  configHelp.classList.toggle("show", helpVisible);
+window.isConfiguratorUnlocked = function () {
+  const s = window.INTERACTION_STATE;
+  return s.totalClicks >= s.requiredTotal && s.tearClicks >= s.requiredTear;
+};
 
-  // auto-hide after 2 seconds
-  if (helpVisible) {
-    setTimeout(() => {
-      configHelp.classList.remove("show");
-      helpVisible = false;
-    }, 2000);
+window.remainingClicksInfo = function () {
+  const s = window.INTERACTION_STATE;
+
+  const remainingTotal = Math.max(0, s.requiredTotal - s.totalClicks);
+  const remainingTear = Math.max(0, s.requiredTear - s.tearClicks);
+
+  if (remainingTear > 0) {
+    return `Touch the tears (${remainingTear})`;
   }
-});
+
+  return `${remainingTotal} more interaction${remainingTotal === 1 ? "" : "s"}`;
+};
+
 
 // start blinking
 setTimeout(randomBlink, 2000);
