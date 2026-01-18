@@ -1,0 +1,202 @@
+/* Face Component Styles */
+
+/* -----------------------------
+   BACKGROUND & LAYOUT
+----------------------------- */
+body {
+    background: #6cc56c;
+}
+
+.inner-panel {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+/* -----------------------------
+   EYES (Top Inputs)
+----------------------------- */
+.top-inputs {
+    position: absolute;
+    top: 12%;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10vw;
+}
+
+.eye {
+    position: relative;
+    overflow: hidden;
+    background: white;
+    border: none;
+    width: 180px;
+    height: 50px;
+    font-size: 22px;
+    cursor: pointer;
+    transition:
+        color 0.6s ease,
+        filter 0.3s steps(4),
+        transform 0.3s ease;
+}
+
+/* Eyelid Animation */
+.eye::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: #6cc56c;
+    /* matches page background */
+    z-index: 2;
+    transition: height 0.25s ease-in-out;
+}
+
+.eye.blink::before {
+    height: 100%;
+}
+
+/* Colors managed by JS state, defaults here */
+.eye.left {
+    color: red;
+}
+
+.eye.right {
+    color: blue;
+}
+
+/* -----------------------------
+   MOUTH (Explore Button)
+----------------------------- */
+.mouth {
+    position: absolute;
+    bottom: 22%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: none;
+    width: 320px;
+    height: 70px;
+    font-size: 32px;
+    color: yellow;
+    cursor: pointer;
+    transition:
+        color 0.6s ease,
+        filter 0.3s steps(4),
+        transform 0.3s ease;
+}
+
+/* -----------------------------
+   TEARS
+----------------------------- */
+/* Tear containers aligned to eye centers */
+.tears {
+    position: absolute;
+    top: calc(12% + 50px + 84px);
+    /* below button */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Center under left eye */
+.tears.left {
+    left: calc(10vw + 90px);
+    transform: translateX(-50%);
+}
+
+/* Center under right eye */
+.tears.right {
+    right: calc(10vw + 90px);
+    transform: translateX(50%);
+}
+
+.tear {
+    width: 29px;
+    height: 29px;
+    background: #000;
+    border: none;
+    opacity: 0.4;
+    animation: tearGlow 3.2s ease-in-out infinite;
+    cursor: pointer;
+}
+
+.tears .tear:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.tears .tear:nth-child(2) {
+    animation-delay: 0.6s;
+}
+
+.tears .tear:nth-child(3) {
+    animation-delay: 1.2s;
+}
+
+.tears .tear:nth-child(4) {
+    animation-delay: 1.8s;
+}
+
+@keyframes tearGlow {
+    0% {
+        opacity: 0.4;
+        box-shadow: none;
+    }
+
+    30% {
+        opacity: 0.9;
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+    }
+
+    60% {
+        opacity: 0.4;
+        box-shadow: none;
+    }
+
+    100% {
+        opacity: 0.4;
+        box-shadow: none;
+    }
+}
+
+/* -----------------------------
+   PIXEL EFFECTS
+----------------------------- */
+.pixelate {
+    filter: contrast(200%) saturate(80%);
+    image-rendering: pixelated;
+    transform: scale(1.02);
+}
+
+.pixel-clone {
+    position: fixed;
+    display: grid;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.pixel {
+    background: currentColor;
+    opacity: 1;
+    transition:
+        transform 0.6s ease,
+        opacity 0.6s ease;
+}
+
+.screen-pixelate {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: inherit;
+    pointer-events: none;
+    z-index: 998;
+    opacity: 0;
+    filter: contrast(180%) saturate(90%);
+    image-rendering: pixelated;
+    transition: opacity 0.6s ease;
+}
