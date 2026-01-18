@@ -1,16 +1,25 @@
-/* Face Component Styles */
+/* Face Component Styles - No Scroll Version */
 
 /* -----------------------------
    BACKGROUND & LAYOUT
 ----------------------------- */
 body {
     background: #6cc56c;
+    overflow: hidden;
+    /* CRITICAL: Prevent scrolling */
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    position: fixed;
+    /* Lock body in place */
 }
 
 .inner-panel {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     position: relative;
+    /* Use flex/grid if we want vertical centering, 
+     but keeping absolute for the requested layout */
 }
 
 /* -----------------------------
@@ -18,7 +27,8 @@ body {
 ----------------------------- */
 .top-inputs {
     position: absolute;
-    top: 12%;
+    /* Use vh for vertical spacing to scale with height */
+    top: 15vh;
     left: 0;
     width: 100%;
     display: flex;
@@ -26,22 +36,29 @@ body {
     padding: 0 10vw;
 }
 
+/* 
+   Eye Sizing:
+   On Landscape (Short screens), vh limits height. 
+   On Portrait, vw limits width. 
+   We clamp both to fit "One Page".
+*/
 .eye {
     position: relative;
     overflow: hidden;
     background: white;
     border: none;
-    width: 180px;
-    height: 50px;
-    font-size: 22px;
+
+    /* Responsive Size logic */
+    width: min(180px, 30vw);
+    height: min(50px, 10vh);
+    /* Scale with height too */
+
+    font-size: clamp(14px, 2vh, 22px);
+
     cursor: pointer;
-    transition:
-        color 0.6s ease,
-        filter 0.3s steps(4),
-        transform 0.3s ease;
+    transition: all 0.3s ease;
 }
 
-/* Eyelid Animation */
 .eye::before {
     content: "";
     position: absolute;
@@ -50,7 +67,6 @@ body {
     width: 100%;
     height: 0%;
     background: #6cc56c;
-    /* matches page background */
     z-index: 2;
     transition: height 0.25s ease-in-out;
 }
@@ -59,7 +75,6 @@ body {
     height: 100%;
 }
 
-/* Colors managed by JS state, defaults here */
 .eye.left {
     color: red;
 }
@@ -73,52 +88,60 @@ body {
 ----------------------------- */
 .mouth {
     position: absolute;
-    bottom: 22%;
+    /* Position from bottom using vh */
+    bottom: 15vh;
     left: 50%;
     transform: translateX(-50%);
     background: white;
     border: none;
-    width: 320px;
-    height: 70px;
-    font-size: 32px;
+
+    width: min(320px, 60vw);
+    height: min(70px, 12vh);
+    /* Scale with height */
+
+    font-size: clamp(18px, 4vh, 32px);
     color: yellow;
     cursor: pointer;
-    transition:
-        color 0.6s ease,
-        filter 0.3s steps(4),
-        transform 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 /* -----------------------------
    TEARS
 ----------------------------- */
-/* Tear containers aligned to eye centers */
 .tears {
     position: absolute;
-    top: calc(12% + 50px + 84px);
-    /* below button */
+    /* 
+     Position tears relative to eyes using vh.
+     Eye Top (15vh) + Eye Height (~10vh max) + Gap (5vh)
+  */
+    top: 30vh;
+
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    /* Vertical gap scales with screen height */
+    gap: 2vh;
 }
 
-/* Center under left eye */
+/* Horizontal Centering: Match Eye Center */
+/* Center = Padding (10vw) + Half Eye Width */
+/* Since Eye Width is dynamic, we approximate or usecalc with the max bounds */
+
 .tears.left {
-    left: calc(10vw + 90px);
+    /* Aligns roughly with center of left eye area */
+    left: calc(10vw + min(90px, 15vw));
     transform: translateX(-50%);
 }
 
-/* Center under right eye */
 .tears.right {
-    right: calc(10vw + 90px);
+    right: calc(10vw + min(90px, 15vw));
     transform: translateX(50%);
 }
 
 .tear {
-    width: 29px;
-    height: 29px;
+    /* Scale tear size with viewport, but cap it */
+    width: min(29px, 5vmin);
+    height: min(29px, 5vmin);
     background: #000;
-    border: none;
     opacity: 0.4;
     animation: tearGlow 3.2s ease-in-out infinite;
     cursor: pointer;
@@ -181,9 +204,7 @@ body {
 .pixel {
     background: currentColor;
     opacity: 1;
-    transition:
-        transform 0.6s ease,
-        opacity 0.6s ease;
+    transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
 .screen-pixelate {
