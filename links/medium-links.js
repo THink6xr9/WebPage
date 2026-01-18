@@ -9,6 +9,7 @@ window.MEDIUM_LINKS = [
   "https://medium.com/@qmbgjhq/point-of-truth-the-love-beyond-time-1e005c64d514",
   "https://medium.com/@qmbgjhq/the-love-in-silence-04ff3e3f6583",
   "https://medium.com/@qmbgjhq/the-safer-shadows-within-ef7969c50cc3",
+  "https://medium.com/@qmbgjhq/the-gift-of-gratitude-49a9d0622c3b",
 
   //Untitled collection and intial links
   "https://medium.com/@qmbgjhq/the-invertible-mind-3225a7ac2b69", //Untitled collection
