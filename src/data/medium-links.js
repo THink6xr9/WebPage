@@ -1,6 +1,4 @@
-// links/medium-links.js
-
-window.MEDIUM_LINKS = [
+export const MEDIUM_LINKS = [
   "https://medium.com/@qmbgjhq/title-when-force-meets-flow-d8baed6d5020",
   "https://medium.com/@qmbgjhq/point-of-truth-the-love-4e2116782d5e",
   "https://medium.com/@qmbgjhq/the-light-within-the-broken-heart-b890fc22f5ba",
@@ -10,6 +8,7 @@ window.MEDIUM_LINKS = [
   "https://medium.com/@qmbgjhq/the-love-in-silence-04ff3e3f6583",
   "https://medium.com/@qmbgjhq/the-safer-shadows-within-ef7969c50cc3",
   "https://medium.com/@qmbgjhq/the-gift-of-gratitude-49a9d0622c3b",
+  "https://medium.com/@qmbgjhq/from-fire-to-light-721a600a2d7e",
 
   //Untitled collection and intial links
   "https://medium.com/@qmbgjhq/the-invertible-mind-3225a7ac2b69", //Untitled collection

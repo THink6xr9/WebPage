@@ -1,6 +1,4 @@
-// links/opensea-links.js
-
-window.OPEN_SEA_LINKS = [
+export const OPEN_SEA_LINKS = [
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/2",
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/3",
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/4",
@@ -10,7 +8,8 @@ window.OPEN_SEA_LINKS = [
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/8",
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/9",
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/10",
-  
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/11",
+
   //need to be added in images folder and intial links
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/27",//need to be added in images folder
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/53",//need to be added in images folder

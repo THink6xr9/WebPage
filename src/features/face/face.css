@@ -1,0 +1,223 @@
+/* Face Component Styles - No Scroll Version */
+
+/* -----------------------------
+   BACKGROUND & LAYOUT
+----------------------------- */
+body {
+    background: #6cc56c;
+    overflow: hidden;
+    /* CRITICAL: Prevent scrolling */
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    position: fixed;
+    /* Lock body in place */
+}
+
+.inner-panel {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /* Use flex/grid if we want vertical centering, 
+     but keeping absolute for the requested layout */
+}
+
+/* -----------------------------
+   EYES (Top Inputs)
+----------------------------- */
+.top-inputs {
+    position: absolute;
+    /* Use vh for vertical spacing to scale with height */
+    top: 15vh;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10vw;
+}
+
+/* 
+   Eye Sizing:
+   On Landscape (Short screens), vh limits height. 
+   On Portrait, vw limits width. 
+   We clamp both to fit "One Page".
+*/
+.eye {
+    position: relative;
+    overflow: hidden;
+    background: white;
+    border: none;
+
+    /* Responsive Size logic */
+    width: min(180px, 30vw);
+    height: min(50px, 10vh);
+    /* Scale with height too */
+
+    font-size: clamp(14px, 2vh, 22px);
+
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.eye::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: #6cc56c;
+    z-index: 2;
+    transition: height 0.25s ease-in-out;
+}
+
+.eye.blink::before {
+    height: 100%;
+}
+
+.eye.left {
+    color: red;
+}
+
+.eye.right {
+    color: blue;
+}
+
+/* -----------------------------
+   MOUTH (Explore Button)
+----------------------------- */
+.mouth {
+    position: absolute;
+    /* Position from bottom using vh */
+    bottom: 15vh;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: none;
+
+    width: min(320px, 60vw);
+    height: min(70px, 12vh);
+    /* Scale with height */
+
+    font-size: clamp(18px, 4vh, 32px);
+    color: yellow;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* -----------------------------
+   TEARS
+----------------------------- */
+.tears {
+    position: absolute;
+    /* 
+     Position tears relative to eyes using vh.
+     Eye Top (15vh) + Eye Height (~10vh max) + Gap (5vh)
+  */
+    top: 30vh;
+
+    display: flex;
+    flex-direction: column;
+    /* Vertical gap scales with screen height */
+    gap: 2vh;
+}
+
+/* Horizontal Centering: Match Eye Center */
+/* Center = Padding (10vw) + Half Eye Width */
+/* Since Eye Width is dynamic, we approximate or usecalc with the max bounds */
+
+.tears.left {
+    /* Aligns roughly with center of left eye area */
+    left: calc(10vw + min(90px, 15vw));
+    transform: translateX(-50%);
+}
+
+.tears.right {
+    right: calc(10vw + min(90px, 15vw));
+    transform: translateX(50%);
+}
+
+.tear {
+    /* Scale tear size with viewport, but cap it */
+    width: min(29px, 5vmin);
+    height: min(29px, 5vmin);
+    background: #000;
+    opacity: 0.4;
+    animation: tearGlow 3.2s ease-in-out infinite;
+    cursor: pointer;
+}
+
+.tears .tear:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.tears .tear:nth-child(2) {
+    animation-delay: 0.6s;
+}
+
+.tears .tear:nth-child(3) {
+    animation-delay: 1.2s;
+}
+
+.tears .tear:nth-child(4) {
+    animation-delay: 1.8s;
+}
+
+@keyframes tearGlow {
+    0% {
+        opacity: 0.4;
+        box-shadow: none;
+    }
+
+    30% {
+        opacity: 0.9;
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+    }
+
+    60% {
+        opacity: 0.4;
+        box-shadow: none;
+    }
+
+    100% {
+        opacity: 0.4;
+        box-shadow: none;
+    }
+}
+
+/* -----------------------------
+   PIXEL EFFECTS
+----------------------------- */
+.pixelate {
+    filter: contrast(200%) saturate(80%);
+    image-rendering: pixelated;
+    transform: scale(1.02);
+}
+
+.pixel-clone {
+    position: fixed;
+    display: grid;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.pixel {
+    background: currentColor;
+    opacity: 1;
+    transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.screen-pixelate {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: inherit;
+    pointer-events: none;
+    z-index: 998;
+    opacity: 0;
+    filter: contrast(180%) saturate(90%);
+    image-rendering: pixelated;
+    transition: opacity 0.6s ease;
+}
