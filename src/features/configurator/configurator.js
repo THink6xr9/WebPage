@@ -6,15 +6,27 @@ import {
   subscribe,
   notifyStateChange
 } from '../../state.js';
+import { playlist } from '../../data/playlist.js';
 
 // Inlined HTML to avoid fetch/CORS issues
 const CONFIG_HTML = `
   <div id="configPanel">
-    <div class="config-color red" data-color="red"></div>
-    <div class="config-color blue" data-color="blue"></div>
-    <div class="config-color yellow" data-color="yellow"></div>
-    <div class="config-color coming-soon">Coming Soon</div>
+    <div class="config-squares">
+      <div class="config-color red" data-color="red"></div>
+      <div class="config-color blue" data-color="blue"></div>
+      <div class="config-color yellow" data-color="yellow"></div>
+      <div class="config-color coming-soon">Coming Soon</div>
+    </div>
+    <div class="music-player-bar" id="musicPlayerBar">
+      <div class="music-track-name" id="trackName">♫ The Gift of Love</div>
+      <div class="music-bar-controls">
+        <button class="music-bar-btn" id="prevBtnBar" aria-label="Previous">⏮</button>
+        <button class="music-bar-btn play-btn-bar" id="playPauseBtnBar" aria-label="Play">▶</button>
+        <button class="music-bar-btn" id="nextBtnBar" aria-label="Next">⏭</button>
+      </div>
+    </div>
   </div>
+  <audio id="musicAudio"></audio>
 `;
 
 export function initConfigurator() { // No longer async
@@ -70,6 +82,9 @@ function setupConfigurator() {
 
   // Listen for state changes (from clicks or other updates)
   subscribe(updateConfiguratorColors);
+
+  // Setup music player
+  setupMusicPlayer();
 }
 
 function swapBackgroundColor(clickedColor) {
@@ -155,4 +170,81 @@ function showConfiguratorHint(text) {
   hintTimeout = setTimeout(() => {
     hint.classList.remove("show");
   }, 1500);
+}
+
+function setupMusicPlayer() {
+  const musicPlayerBar = document.getElementById("musicPlayerBar");
+  const trackName = document.getElementById("trackName");
+  const audio = document.getElementById("musicAudio");
+  const playPauseBtnBar = document.getElementById("playPauseBtnBar");
+  const prevBtnBar = document.getElementById("prevBtnBar");
+  const nextBtnBar = document.getElementById("nextBtnBar");
+
+  if (!musicPlayerBar || !audio || !trackName) return;
+
+  let currentTrackIndex = 0;
+  let isPlaying = false;
+
+  // Load initial track
+  loadTrack(currentTrackIndex);
+
+  // Play/Pause button
+  playPauseBtnBar.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (isPlaying) {
+      audio.pause();
+      playPauseBtnBar.textContent = "▶";
+      musicPlayerBar.classList.remove("playing");
+    } else {
+      audio.play().catch(err => {
+        console.error("Audio playback failed:", err);
+      });
+      playPauseBtnBar.textContent = "⏸";
+      musicPlayerBar.classList.add("playing");
+    }
+    isPlaying = !isPlaying;
+  });
+
+  // Previous button
+  prevBtnBar.addEventListener("click", (e) => {
+    e.stopPropagation();
+    currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+    loadTrack(currentTrackIndex);
+    if (isPlaying) {
+      audio.play();
+    }
+  });
+
+  // Next button
+  nextBtnBar.addEventListener("click", (e) => {
+    e.stopPropagation();
+    currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+    loadTrack(currentTrackIndex);
+    if (isPlaying) {
+      audio.play();
+    }
+  });
+
+  // Auto-advance to next track when current ends
+  audio.addEventListener("ended", () => {
+    currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+    loadTrack(currentTrackIndex);
+    if (isPlaying) {
+      audio.play();
+    }
+  });
+
+  // Load track helper function
+  function loadTrack(index) {
+    const track = playlist[index];
+    if (!track) return;
+
+    audio.src = track.src;
+    trackName.textContent = "♫ " + track.title;
+
+    // Update button icon
+    if (!isPlaying) {
+      playPauseBtnBar.textContent = "▶";
+    }
+  }
 }
