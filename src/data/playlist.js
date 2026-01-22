@@ -3,11 +3,11 @@
 
 export const playlist = [
     {
-        title: "The Gift of Love",
-        src: "music/The Gift of Love.mp3"
+        title: "Open Hands, Open Heart",
+        src: "music/Open-Hands-Open-Heart.mp3"
     },
-    {
-        title: "In the Quiet of Forever",
-        src: "music/In the Quiet of Forever.mp3"
-    }
+    // {
+    //     title: "In the Quiet of Forever",
+    //     src: "music/In-the-Quiet-of-Forever.mp3"
+    // }
 ];
