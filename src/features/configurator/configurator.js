@@ -26,6 +26,15 @@ const CONFIG_HTML = `
       </div>
     </div>
   </div>
+  <button class="music-playlist-btn locked" id="playlistBtn" aria-label="Open Playlist">☰</button>
+  <div class="music-playlist-panel" id="playlistPanel">
+    <div class="playlist-static-icon">☰</div>
+    <button class="playlist-back-btn" id="playlistBackBtn" aria-label="Close Playlist">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 10 4 15 9 20"></polyline><path d="M20 4v7a4 4 0 0 1-4 4H4"></path></svg>
+    </button>
+    <div class="playlist-header">Playlist</div>
+    <div class="playlist-list" id="playlistList"></div>
+  </div>
   <audio id="musicAudio"></audio>
 `;
 
@@ -179,14 +188,89 @@ function setupMusicPlayer() {
   const playPauseBtnBar = document.getElementById("playPauseBtnBar");
   const prevBtnBar = document.getElementById("prevBtnBar");
   const nextBtnBar = document.getElementById("nextBtnBar");
+  const playlistBtn = document.getElementById("playlistBtn");
+  const playlistPanel = document.getElementById("playlistPanel");
+  const playlistList = document.getElementById("playlistList");
 
-  if (!musicPlayerBar || !audio || !trackName) return;
+  const playlistBackBtn = document.getElementById("playlistBackBtn");
+
+  if (!musicPlayerBar || !audio || !trackName || !playlistBtn || !playlistPanel || !playlistList || !playlistBackBtn) return;
 
   let currentTrackIndex = 0;
   let isPlaying = false;
+  let isPlaylistUnlocked = false;
+  let autoHideTimeout = null;
+
+  // Auto-hide timer functions
+  function startAutoHideTimer() {
+    clearTimeout(autoHideTimeout);
+    autoHideTimeout = setTimeout(() => {
+      // Hide button and re-lock
+      playlistBtn.classList.add("locked");
+      isPlaylistUnlocked = false;
+      // Also close panel if open
+      closePlaylist();
+    }, 60000); // 1 minute
+  }
+
+  function stopAutoHideTimer() {
+    clearTimeout(autoHideTimeout);
+  }
+
+  // Audio event listeners for timer
+  audio.addEventListener("play", () => {
+    stopAutoHideTimer();
+    // Ensure button is visible when playing
+    if (!isPlaylistUnlocked) {
+      isPlaylistUnlocked = true;
+      playlistBtn.classList.remove("locked");
+    }
+  });
+
+  audio.addEventListener("pause", () => {
+    startAutoHideTimer();
+  });
+
+  audio.addEventListener("ended", () => {
+    // Note: 'ended' usually triggers next track auto-play, so this might be redundant if the next track starts immediately. 
+    // But if playback stops at end of playlist (if loop is off), this handles it.
+    // However, our current 'ended' listener auto-advances. 
+    // We'll leave it here as a fallback or for pause-like state.
+    startAutoHideTimer();
+  });
 
   // Load initial track
   loadTrack(currentTrackIndex);
+
+  // Open playlist panel
+  playlistBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (!isPlaylistUnlocked) return;
+
+    playlistPanel.classList.add("show");
+    playlistBtn.classList.add("hidden");
+    document.body.classList.add("sidebar-open");
+    renderPlaylist();
+  });
+
+  // Close playlist panel (Back Button)
+  playlistBackBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closePlaylist();
+  });
+
+  // Close panel on outside click
+  document.addEventListener("click", (e) => {
+    if (playlistPanel.classList.contains("show") && !playlistPanel.contains(e.target) && !playlistBtn.contains(e.target)) {
+      closePlaylist();
+    }
+  });
+
+  function closePlaylist() {
+    playlistPanel.classList.remove("show");
+    playlistBtn.classList.remove("hidden");
+    document.body.classList.remove("sidebar-open");
+  }
 
   // Play/Pause button
   playPauseBtnBar.addEventListener("click", (e) => {
@@ -201,6 +285,12 @@ function setupMusicPlayer() {
       });
       playPauseBtnBar.textContent = "⏸";
       musicPlayerBar.classList.add("playing");
+
+      // Unlock playlist on first play
+      if (!isPlaylistUnlocked) {
+        isPlaylistUnlocked = true;
+        playlistBtn.classList.remove("locked");
+      }
     }
     isPlaying = !isPlaying;
   });
@@ -213,6 +303,7 @@ function setupMusicPlayer() {
     if (isPlaying) {
       audio.play();
     }
+    renderPlaylist();
   });
 
   // Next button
@@ -223,6 +314,7 @@ function setupMusicPlayer() {
     if (isPlaying) {
       audio.play();
     }
+    renderPlaylist();
   });
 
   // Auto-advance to next track when current ends
@@ -232,6 +324,7 @@ function setupMusicPlayer() {
     if (isPlaying) {
       audio.play();
     }
+    renderPlaylist();
   });
 
   // Load track helper function
@@ -246,5 +339,27 @@ function setupMusicPlayer() {
     if (!isPlaying) {
       playPauseBtnBar.textContent = "▶";
     }
+  }
+
+  // Render playlist items
+  function renderPlaylist() {
+    playlistList.innerHTML = "";
+    playlist.forEach((track, index) => {
+      const item = document.createElement("div");
+      item.className = `playlist-item ${index === currentTrackIndex ? 'active' : ''}`;
+      item.textContent = track.title;
+      item.addEventListener("click", (e) => {
+        e.stopPropagation();
+        currentTrackIndex = index;
+        loadTrack(currentTrackIndex);
+        if (!isPlaying) {
+          playPauseBtnBar.click(); // Trigger play if not playing
+        } else {
+          audio.play();
+        }
+        playlistPanel.classList.remove("show");
+      });
+      playlistList.appendChild(item);
+    });
   }
 }

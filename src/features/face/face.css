@@ -46,6 +46,15 @@ body {
     width: 100%;
     height: 100%;
     position: relative;
+    transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile: Overlay behavior (no shift) */
+@media (min-width: 769px) {
+    body.sidebar-open .inner-panel {
+        margin-left: 280px;
+        width: calc(100% - 280px);
+    }
 }
 
 /* -----------------------------
