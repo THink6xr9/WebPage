@@ -301,9 +301,9 @@ function setupMusicPlayer() {
     currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
     loadTrack(currentTrackIndex);
     if (isPlaying) {
-      audio.play();
+      audio.play().catch(e => console.error("Play failed", e));
     }
-    renderPlaylist();
+    renderPlaylist(); // re-render to update active class
   });
 
   // Next button
@@ -312,7 +312,7 @@ function setupMusicPlayer() {
     currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
     loadTrack(currentTrackIndex);
     if (isPlaying) {
-      audio.play();
+      audio.play().catch(e => console.error("Play failed", e));
     }
     renderPlaylist();
   });
@@ -321,9 +321,7 @@ function setupMusicPlayer() {
   audio.addEventListener("ended", () => {
     currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
     loadTrack(currentTrackIndex);
-    if (isPlaying) {
-      audio.play();
-    }
+    audio.play().catch(e => console.error("Auto-advance play failed", e));
     renderPlaylist();
   });
 
@@ -335,8 +333,11 @@ function setupMusicPlayer() {
     audio.src = track.src;
     trackName.textContent = "♫ " + track.title;
 
-    // Update button icon
-    if (!isPlaying) {
+    // NOTE: We don't change isPlaying here, we respect current state
+    if (isPlaying) {
+      // If we were playing, verify UI shows pause icon (playing state)
+      playPauseBtnBar.textContent = "⏸";
+    } else {
       playPauseBtnBar.textContent = "▶";
     }
   }
@@ -352,12 +353,22 @@ function setupMusicPlayer() {
         e.stopPropagation();
         currentTrackIndex = index;
         loadTrack(currentTrackIndex);
-        if (!isPlaying) {
-          playPauseBtnBar.click(); // Trigger play if not playing
-        } else {
-          audio.play();
-        }
-        playlistPanel.classList.remove("show");
+
+        // Always play when selecting from playlist
+        audio.play().then(() => {
+          isPlaying = true;
+          playPauseBtnBar.textContent = "⏸";
+          musicPlayerBar.classList.add("playing");
+          renderPlaylist(); // Update active state
+
+          // Unlock if needed
+          if (!isPlaylistUnlocked) {
+            isPlaylistUnlocked = true;
+            playlistBtn.classList.remove("locked");
+          }
+        }).catch(err => console.error("Playlist selection play failed:", err));
+
+        // REMOVED: playlistPanel.classList.remove("show"); -> Keep open
       });
       playlistList.appendChild(item);
     });
