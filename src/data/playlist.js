@@ -11,5 +11,10 @@ export const playlist = [
         title: "In the Quiet of Forever",
         src: "music/In-the-Quiet-of-Forever.mp3",
         youtubeLink: "https://youtu.be/fbqFtNrzbBg"
+    },
+    {
+        title: "Learned Silence",
+        src: "music/Learned-Silence.mp3",
+        youtubeLink: "https://youtu.be/5ptvUddhWec"
     }
 ];
