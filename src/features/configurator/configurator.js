@@ -6,7 +6,7 @@ import {
   subscribe,
   notifyStateChange
 } from '../../state.js';
-import { playlist } from '../../data/playlist.js';
+
 
 // Inlined HTML to avoid fetch/CORS issues
 const CONFIG_HTML = `
@@ -26,16 +26,6 @@ const CONFIG_HTML = `
       </div>
     </div>
   </div>
-  <button class="music-playlist-btn locked" id="playlistBtn" aria-label="Open Playlist">☰</button>
-  <div class="music-playlist-panel" id="playlistPanel">
-    <div class="playlist-static-icon">☰</div>
-    <button class="playlist-back-btn" id="playlistBackBtn" aria-label="Close Playlist">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 10 4 15 9 20"></polyline><path d="M20 4v7a4 4 0 0 1-4 4H4"></path></svg>
-    </button>
-    <div class="playlist-header">Playlist</div>
-    <div class="playlist-list" id="playlistList"></div>
-  </div>
-  <audio id="musicAudio"></audio>
 `;
 
 export function initConfigurator() { // No longer async
@@ -91,9 +81,6 @@ function setupConfigurator() {
 
   // Listen for state changes (from clicks or other updates)
   subscribe(updateConfiguratorColors);
-
-  // Setup music player
-  setupMusicPlayer();
 }
 
 function swapBackgroundColor(clickedColor) {
@@ -179,198 +166,4 @@ function showConfiguratorHint(text) {
   hintTimeout = setTimeout(() => {
     hint.classList.remove("show");
   }, 1500);
-}
-
-function setupMusicPlayer() {
-  const musicPlayerBar = document.getElementById("musicPlayerBar");
-  const trackName = document.getElementById("trackName");
-  const audio = document.getElementById("musicAudio");
-  const playPauseBtnBar = document.getElementById("playPauseBtnBar");
-  const prevBtnBar = document.getElementById("prevBtnBar");
-  const nextBtnBar = document.getElementById("nextBtnBar");
-  const playlistBtn = document.getElementById("playlistBtn");
-  const playlistPanel = document.getElementById("playlistPanel");
-  const playlistList = document.getElementById("playlistList");
-
-  const playlistBackBtn = document.getElementById("playlistBackBtn");
-
-  if (!musicPlayerBar || !audio || !trackName || !playlistBtn || !playlistPanel || !playlistList || !playlistBackBtn) return;
-
-  let currentTrackIndex = 0;
-  let isPlaying = false;
-  let isPlaylistUnlocked = false;
-  let autoHideTimeout = null;
-
-  // Auto-hide timer functions
-  function startAutoHideTimer() {
-    clearTimeout(autoHideTimeout);
-    autoHideTimeout = setTimeout(() => {
-      // Hide button and re-lock
-      playlistBtn.classList.add("locked");
-      isPlaylistUnlocked = false;
-      // Also close panel if open
-      closePlaylist();
-    }, 60000); // 1 minute
-  }
-
-  function stopAutoHideTimer() {
-    clearTimeout(autoHideTimeout);
-  }
-
-  // Audio event listeners for timer
-  audio.addEventListener("play", () => {
-    stopAutoHideTimer();
-    // Ensure button is visible when playing
-    if (!isPlaylistUnlocked) {
-      isPlaylistUnlocked = true;
-      playlistBtn.classList.remove("locked");
-    }
-  });
-
-  audio.addEventListener("pause", () => {
-    startAutoHideTimer();
-  });
-
-  audio.addEventListener("ended", () => {
-    // Note: 'ended' usually triggers next track auto-play, so this might be redundant if the next track starts immediately. 
-    // But if playback stops at end of playlist (if loop is off), this handles it.
-    // However, our current 'ended' listener auto-advances. 
-    // We'll leave it here as a fallback or for pause-like state.
-    startAutoHideTimer();
-  });
-
-  // Load initial track
-  loadTrack(currentTrackIndex);
-
-  // Open playlist panel
-  playlistBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    if (!isPlaylistUnlocked) return;
-
-    playlistPanel.classList.add("show");
-    playlistBtn.classList.add("hidden");
-    document.body.classList.add("sidebar-open");
-    renderPlaylist();
-  });
-
-  // Close playlist panel (Back Button)
-  playlistBackBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    closePlaylist();
-  });
-
-  // Close panel on outside click
-  document.addEventListener("click", (e) => {
-    if (playlistPanel.classList.contains("show") && !playlistPanel.contains(e.target) && !playlistBtn.contains(e.target)) {
-      closePlaylist();
-    }
-  });
-
-  function closePlaylist() {
-    playlistPanel.classList.remove("show");
-    playlistBtn.classList.remove("hidden");
-    document.body.classList.remove("sidebar-open");
-  }
-
-  // Play/Pause button
-  playPauseBtnBar.addEventListener("click", (e) => {
-    e.stopPropagation();
-    if (isPlaying) {
-      audio.pause();
-      playPauseBtnBar.textContent = "▶";
-      musicPlayerBar.classList.remove("playing");
-    } else {
-      audio.play().catch(err => {
-        console.error("Audio playback failed:", err);
-      });
-      playPauseBtnBar.textContent = "⏸";
-      musicPlayerBar.classList.add("playing");
-
-      // Unlock playlist on first play
-      if (!isPlaylistUnlocked) {
-        isPlaylistUnlocked = true;
-        playlistBtn.classList.remove("locked");
-      }
-    }
-    isPlaying = !isPlaying;
-  });
-
-  // Previous button
-  prevBtnBar.addEventListener("click", (e) => {
-    e.stopPropagation();
-    currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
-    loadTrack(currentTrackIndex);
-    if (isPlaying) {
-      audio.play().catch(e => console.error("Play failed", e));
-    }
-    renderPlaylist(); // re-render to update active class
-  });
-
-  // Next button
-  nextBtnBar.addEventListener("click", (e) => {
-    e.stopPropagation();
-    currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-    loadTrack(currentTrackIndex);
-    if (isPlaying) {
-      audio.play().catch(e => console.error("Play failed", e));
-    }
-    renderPlaylist();
-  });
-
-  // Auto-advance to next track when current ends
-  audio.addEventListener("ended", () => {
-    currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-    loadTrack(currentTrackIndex);
-    audio.play().catch(e => console.error("Auto-advance play failed", e));
-    renderPlaylist();
-  });
-
-  // Load track helper function
-  function loadTrack(index) {
-    const track = playlist[index];
-    if (!track) return;
-
-    audio.src = track.src;
-    trackName.textContent = "♫ " + track.title;
-
-    // NOTE: We don't change isPlaying here, we respect current state
-    if (isPlaying) {
-      // If we were playing, verify UI shows pause icon (playing state)
-      playPauseBtnBar.textContent = "⏸";
-    } else {
-      playPauseBtnBar.textContent = "▶";
-    }
-  }
-
-  // Render playlist items
-  function renderPlaylist() {
-    playlistList.innerHTML = "";
-    playlist.forEach((track, index) => {
-      const item = document.createElement("div");
-      item.className = `playlist-item ${index === currentTrackIndex ? 'active' : ''}`;
-      item.textContent = track.title;
-      item.addEventListener("click", (e) => {
-        e.stopPropagation();
-        currentTrackIndex = index;
-        loadTrack(currentTrackIndex);
-
-        // Always play when selecting from playlist
-        audio.play().then(() => {
-          isPlaying = true;
-          playPauseBtnBar.textContent = "⏸";
-          musicPlayerBar.classList.add("playing");
-          renderPlaylist(); // Update active state
-
-          // Unlock if needed
-          if (!isPlaylistUnlocked) {
-            isPlaylistUnlocked = true;
-            playlistBtn.classList.remove("locked");
-          }
-        }).catch(err => console.error("Playlist selection play failed:", err));
-
-        // REMOVED: playlistPanel.classList.remove("show"); -> Keep open
-      });
-      playlistList.appendChild(item);
-    });
-  }
 }

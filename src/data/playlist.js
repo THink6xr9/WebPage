@@ -4,10 +4,12 @@
 export const playlist = [
     {
         title: "Open Hands - Open Heart",
-        src: "music/Open-Hands-Open-Heart.mp3"
+        src: "music/Open-Hands-Open-Heart.mp3",
+        youtubeLink: "https://youtu.be/KJIvs12fT9Q"
     },
     {
         title: "In the Quiet of Forever",
-        src: "music/In-the-Quiet-of-Forever.mp3"
+        src: "music/In-the-Quiet-of-Forever.mp3",
+        youtubeLink: "https://youtu.be/fbqFtNrzbBg"
     }
 ];
