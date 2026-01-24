@@ -16,5 +16,10 @@ export const playlist = [
         title: "Learned Silence",
         src: "music/Learned-Silence.mp3",
         youtubeLink: "https://youtu.be/5ptvUddhWec"
+    },
+    {
+        title: "Eterna Speaks",
+        src: "music/Eterna-Speaks.mp3",
+        youtubeLink: "https://youtu.be/w4octYcPmEY"
     }
 ];
