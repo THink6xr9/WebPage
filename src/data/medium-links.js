@@ -12,6 +12,7 @@ export const MEDIUM_LINKS = [
   "https://medium.com/@qmbgjhq/the-gift-of-love-89880117186d",
   "https://medium.com/@qmbgjhq/the-mirror-of-wholeness-59cc60f34508",
   "https://medium.com/@qmbgjhq/eterna-e394267e13f3",
+  "https://medium.com/@qmbgjhq/eterna-e394267e13f3",
 
   //Untitled collection and intial links
   "https://medium.com/@qmbgjhq/the-invertible-mind-3225a7ac2b69", //Untitled collection
