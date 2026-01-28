@@ -13,6 +13,9 @@ export const MEDIUM_LINKS = [
   "https://medium.com/@qmbgjhq/the-mirror-of-wholeness-59cc60f34508",
   "https://medium.com/@qmbgjhq/eterna-e394267e13f3",
   "https://medium.com/@qmbgjhq/eterna-e394267e13f3",
+  "https://medium.com/@qmbgjhq/love-holding-hunger-ed3fc0b0d07d",
+  "https://medium.com/@qmbgjhq/roots-of-wholeness-9bedd68b32b8",
+  "https://medium.com/@qmbgjhq/the-lie-in-loneliness-5736d48252cb",
 
   //Untitled collection and intial links
   "https://medium.com/@qmbgjhq/the-invertible-mind-3225a7ac2b69", //Untitled collection
