@@ -76,6 +76,14 @@ function setupConfigurator() {
     });
   });
 
+  // Handle 'Coming Soon' click
+  const comingSoonSquare = document.querySelector(".config-color.coming-soon");
+  if (comingSoonSquare) {
+    comingSoonSquare.addEventListener("click", () => {
+      comingSoonSquare.textContent = "Verified Only";
+    });
+  }
+
   // Initialize configurator colors
   updateConfiguratorColors();
 

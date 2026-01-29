@@ -75,7 +75,7 @@
 .config-color.coming-soon {
   background: #ddd;
   color: #999;
-  cursor: default;
+  cursor: pointer;
   font-size: 10px;
   text-align: center;
   padding: 8px;

@@ -219,6 +219,48 @@ body {
 }
 
 /* -----------------------------
+   YOUTUBE LINKS
+----------------------------- */
+.youtube-links {
+    position: absolute;
+    top: calc(var(--mouth-top) + var(--mouth-h) + 16px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 9;
+}
+
+.youtube-icon {
+    width: 32px;
+    height: 24px;
+    background: red;
+    /* Typical YouTube color, user can request changes */
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Little play triangle for the icon */
+.youtube-icon::after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 8px solid white;
+}
+
+.youtube-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* -----------------------------
    PIXEL EFFECTS
 ----------------------------- */
 .pixelate {
