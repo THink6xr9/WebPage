@@ -1,0 +1,93 @@
+.puzzle-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.puzzle-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.puzzle-modal {
+    background: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: #333;
+}
+
+.puzzle-modal h2 {
+    margin-top: 0;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.close-puzzle {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.close-puzzle:hover {
+    color: #000;
+}
+
+.chessboard {
+    display: grid;
+    grid-template-columns: repeat(8, 40px);
+    grid-template-rows: repeat(8, 40px);
+    border: 2px solid #333;
+    margin: 0 auto;
+}
+
+.square {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: default;
+}
+
+.square.light {
+    background: #f0d9b5;
+}
+
+.square.dark {
+    background: #b58863;
+}
+
+.square.selected {
+    background: #7b61ff;
+    /* highlight selected square */
+}
+
+.piece {
+    font-size: 30px;
+    user-select: none;
+}
+
+.puzzle-feedback {
+    margin-top: 16px;
+    height: 20px;
+    font-weight: bold;
+    font-size: 16px;
+}

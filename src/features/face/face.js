@@ -6,6 +6,8 @@ import {
 import { OPEN_SEA_LINKS } from '../../data/opensea-links.js';
 import { MEDIUM_LINKS } from '../../data/medium-links.js';
 import { YOUTUBE_LINKS } from '../../data/youtube-links.js';
+import { INTERACTION_STATE } from '../../state.js';
+import { openPuzzle } from '../puzzle/puzzle.js';
 
 /* -----------------------------
    CONSTANTS & DATA
@@ -35,6 +37,8 @@ const FACE_HTML = `
       <!-- Icons injected here -->
     </div>
 
+    <div class="nose hidden" id="chessNose">♞</div>
+
     <div class="tears left">
       <div class="tear"></div>
       <div class="tear"></div>
@@ -55,7 +59,7 @@ const FACE_HTML = `
 /* -----------------------------
    STATE & ELEMENTS
 ----------------------------- */
-let leftEye, rightEye, exploreBtn;
+let leftEye, rightEye, exploreBtn, chessNose;
 
 /* -----------------------------
    INITIALIZATION
@@ -68,6 +72,7 @@ export function initFace() {
     leftEye = document.getElementById("btn1");
     rightEye = document.getElementById("btn2");
     exploreBtn = document.getElementById("btn3");
+    chessNose = document.getElementById("chessNose");
 
     // Render YouTube Links
     const ytContainer = document.getElementById("youtubeLinks");
@@ -90,7 +95,22 @@ export function initFace() {
     // Start Lifecycle
     applyColorState();
     subscribe(applyColorState);
+    subscribe(checkNoseVisibility);
     setTimeout(randomBlink, 2000);
+
+    // Nose logic
+    if (chessNose) {
+        chessNose.addEventListener("click", () => {
+            incrementInteraction();
+            openPuzzle();
+        });
+    }
+}
+
+function checkNoseVisibility() {
+    if (chessNose && INTERACTION_STATE.totalClicks > 0) {
+        chessNose.classList.remove('hidden');
+    }
 }
 
 

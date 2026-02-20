@@ -4,6 +4,7 @@
 import { initFace } from './features/face/face.js';
 import { initConfigurator } from './features/configurator/configurator.js';
 import { initMusicPlayer } from './features/musicPlayer/musicPlayer.js';
+import { initPuzzle } from './features/puzzle/puzzle.js';
 
 /* -----------------------------
    INITIALIZATION
@@ -14,3 +15,4 @@ import { initMusicPlayer } from './features/musicPlayer/musicPlayer.js';
 initFace();
 initConfigurator();
 initMusicPlayer();
+initPuzzle();

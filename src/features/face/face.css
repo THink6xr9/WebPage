@@ -139,6 +139,32 @@ body {
 }
 
 /* -----------------------------
+   NOSE (Chess Icon)
+----------------------------- */
+.nose {
+    position: absolute;
+    top: calc(var(--eye-top) + var(--eye-h) + (var(--mouth-top) - var(--eye-top) - var(--eye-h)) / 2);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(30px, 6vh, 48px);
+    color: #333;
+    cursor: pointer;
+    z-index: 15;
+    transition: opacity 0.4s ease, transform 0.2s ease;
+    user-select: none;
+}
+
+.nose.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.nose:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    color: #000;
+}
+
+/* -----------------------------
    TEARS
 ----------------------------- */
 .tears {
