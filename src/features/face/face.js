@@ -17,7 +17,7 @@ const TEAR_LINKS = [...OPEN_SEA_LINKS, ...MEDIUM_LINKS];
 const LINKS = [
     "https://opensea.io/collection/time-402",
     "https://medium.com/@qmbgjhq",
-    "https://x.com/_THink__6xr9"
+    "https://x.com/unfoldbyclick"
 ];
 
 /* -----------------------------
