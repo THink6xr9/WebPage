@@ -18,6 +18,22 @@ export const OPEN_SEA_LINKS = [
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/18",
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/19",
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/20",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/21",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/22",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/23",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/24",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/25",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/27",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/28",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/29",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/30",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/31",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/32",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/33",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/34",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/35",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/36",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/37",
 
   //need to be added in images folder and intial links
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/27",//need to be added in images folder
