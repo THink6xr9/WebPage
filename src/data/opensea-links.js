@@ -10,6 +10,14 @@ export const OPEN_SEA_LINKS = [
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/10",
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/11",
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/12",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/13",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/14",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/15",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/16",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/17",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/18",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/19",
+  "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/20",
 
   //need to be added in images folder and intial links
   "https://opensea.io/item/polygon/0x164ba817278d4308be80b6afe4f7ab55f5aea88c/27",//need to be added in images folder

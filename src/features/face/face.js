@@ -5,6 +5,7 @@ import {
 } from '../../state.js';
 import { OPEN_SEA_LINKS } from '../../data/opensea-links.js';
 import { MEDIUM_LINKS } from '../../data/medium-links.js';
+import { YOUTUBE_LINKS } from '../../data/youtube-links.js';
 
 /* -----------------------------
    CONSTANTS & DATA
@@ -29,6 +30,10 @@ const FACE_HTML = `
     </div>
 
     <button class="mouth" id="btn3">EXPLORE</button>
+
+    <div class="youtube-links" id="youtubeLinks">
+      <!-- Icons injected here -->
+    </div>
 
     <div class="tears left">
       <div class="tear"></div>
@@ -57,14 +62,26 @@ let leftEye, rightEye, exploreBtn;
 ----------------------------- */
 export function initFace() {
     // Inject HTML
-    // We want this to be the main content, so usually we append to body or specific container
-    // For this refactor, we are replacing the existing .inner-panel logic
     document.body.insertAdjacentHTML("beforeend", FACE_HTML);
 
     // Get Elements
     leftEye = document.getElementById("btn1");
     rightEye = document.getElementById("btn2");
     exploreBtn = document.getElementById("btn3");
+
+    // Render YouTube Links
+    const ytContainer = document.getElementById("youtubeLinks");
+    if (ytContainer) {
+        YOUTUBE_LINKS.forEach(link => {
+            const icon = document.createElement("div");
+            icon.className = "youtube-icon";
+            icon.addEventListener("click", () => {
+                incrementInteraction();
+                window.open(link, "_blank");
+            });
+            ytContainer.appendChild(icon);
+        });
+    }
 
     // Setup Interactions
     setupClickHandlers();

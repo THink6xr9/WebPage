@@ -6,7 +6,7 @@ import {
   subscribe,
   notifyStateChange
 } from '../../state.js';
-import { playlist } from '../../data/playlist.js';
+
 
 // Inlined HTML to avoid fetch/CORS issues
 const CONFIG_HTML = `
@@ -26,7 +26,6 @@ const CONFIG_HTML = `
       </div>
     </div>
   </div>
-  <audio id="musicAudio"></audio>
 `;
 
 export function initConfigurator() { // No longer async
@@ -77,14 +76,19 @@ function setupConfigurator() {
     });
   });
 
+  // Handle 'Coming Soon' click
+  const comingSoonSquare = document.querySelector(".config-color.coming-soon");
+  if (comingSoonSquare) {
+    comingSoonSquare.addEventListener("click", () => {
+      comingSoonSquare.textContent = "Verified Only";
+    });
+  }
+
   // Initialize configurator colors
   updateConfiguratorColors();
 
   // Listen for state changes (from clicks or other updates)
   subscribe(updateConfiguratorColors);
-
-  // Setup music player
-  setupMusicPlayer();
 }
 
 function swapBackgroundColor(clickedColor) {
@@ -170,81 +174,4 @@ function showConfiguratorHint(text) {
   hintTimeout = setTimeout(() => {
     hint.classList.remove("show");
   }, 1500);
-}
-
-function setupMusicPlayer() {
-  const musicPlayerBar = document.getElementById("musicPlayerBar");
-  const trackName = document.getElementById("trackName");
-  const audio = document.getElementById("musicAudio");
-  const playPauseBtnBar = document.getElementById("playPauseBtnBar");
-  const prevBtnBar = document.getElementById("prevBtnBar");
-  const nextBtnBar = document.getElementById("nextBtnBar");
-
-  if (!musicPlayerBar || !audio || !trackName) return;
-
-  let currentTrackIndex = 0;
-  let isPlaying = false;
-
-  // Load initial track
-  loadTrack(currentTrackIndex);
-
-  // Play/Pause button
-  playPauseBtnBar.addEventListener("click", (e) => {
-    e.stopPropagation();
-    if (isPlaying) {
-      audio.pause();
-      playPauseBtnBar.textContent = "▶";
-      musicPlayerBar.classList.remove("playing");
-    } else {
-      audio.play().catch(err => {
-        console.error("Audio playback failed:", err);
-      });
-      playPauseBtnBar.textContent = "⏸";
-      musicPlayerBar.classList.add("playing");
-    }
-    isPlaying = !isPlaying;
-  });
-
-  // Previous button
-  prevBtnBar.addEventListener("click", (e) => {
-    e.stopPropagation();
-    currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
-    loadTrack(currentTrackIndex);
-    if (isPlaying) {
-      audio.play();
-    }
-  });
-
-  // Next button
-  nextBtnBar.addEventListener("click", (e) => {
-    e.stopPropagation();
-    currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-    loadTrack(currentTrackIndex);
-    if (isPlaying) {
-      audio.play();
-    }
-  });
-
-  // Auto-advance to next track when current ends
-  audio.addEventListener("ended", () => {
-    currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-    loadTrack(currentTrackIndex);
-    if (isPlaying) {
-      audio.play();
-    }
-  });
-
-  // Load track helper function
-  function loadTrack(index) {
-    const track = playlist[index];
-    if (!track) return;
-
-    audio.src = track.src;
-    trackName.textContent = "♫ " + track.title;
-
-    // Update button icon
-    if (!isPlaying) {
-      playPauseBtnBar.textContent = "▶";
-    }
-  }
 }
