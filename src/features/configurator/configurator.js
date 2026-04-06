@@ -7,13 +7,24 @@ import {
   notifyStateChange
 } from '../../state.js';
 
+
 // Inlined HTML to avoid fetch/CORS issues
 const CONFIG_HTML = `
   <div id="configPanel">
-    <div class="config-color red" data-color="red"></div>
-    <div class="config-color blue" data-color="blue"></div>
-    <div class="config-color yellow" data-color="yellow"></div>
-    <div class="config-color coming-soon">Coming Soon</div>
+    <div class="config-squares">
+      <div class="config-color red" data-color="red"></div>
+      <div class="config-color blue" data-color="blue"></div>
+      <div class="config-color yellow" data-color="yellow"></div>
+      <div class="config-color coming-soon">Coming Soon</div>
+    </div>
+    <div class="music-player-bar" id="musicPlayerBar">
+      <div class="music-track-name" id="trackName">♫ The Gift of Love</div>
+      <div class="music-bar-controls">
+        <button class="music-bar-btn" id="prevBtnBar" aria-label="Previous">⏮</button>
+        <button class="music-bar-btn play-btn-bar" id="playPauseBtnBar" aria-label="Play">▶</button>
+        <button class="music-bar-btn" id="nextBtnBar" aria-label="Next">⏭</button>
+      </div>
+    </div>
   </div>
 `;
 
@@ -64,6 +75,14 @@ function setupConfigurator() {
       showConfiguratorHint(getRemainingClicksInfo());
     });
   });
+
+  // Handle 'Coming Soon' click
+  const comingSoonSquare = document.querySelector(".config-color.coming-soon");
+  if (comingSoonSquare) {
+    comingSoonSquare.addEventListener("click", () => {
+      comingSoonSquare.textContent = "Verified Only";
+    });
+  }
 
   // Initialize configurator colors
   updateConfiguratorColors();
