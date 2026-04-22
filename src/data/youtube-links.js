@@ -25,5 +25,5 @@ export const YOUTUBE_LINKS = [
     "https://youtu.be/trlgnHuVB9A", //34
     "https://youtu.be/szEiqiiyT_E", //35
     "https://youtu.be/WigwTQyzhB4", //36
-    "https://youtu.be/mpWGau6WJ60" //37
+    "https://youtu.be/mpWGau6WJ60"  //37
 ];
