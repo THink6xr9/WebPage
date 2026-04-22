@@ -1,4 +1,34 @@
-/* Face Component Styles - No Scroll Version */
+/* Face Component Styles - Verified Isosceles Center Layout */
+
+:root {
+    /* -----------------------------
+     ISOSCELES GEOMETRY
+     ----------------------------- */
+
+    /* 1. Define Fixed Sizes (or Dynamic VW/VH) */
+    --eye-w: min(180px, 30vw);
+    --eye-h: min(50px, 10vh);
+    --mouth-w: min(320px, 60vw);
+    --mouth-h: min(70px, 12vh);
+
+    /* 2. Define Triangle Shape */
+    /* Higher value = Taller triangle (more isosceles, less equilateral) */
+    /* User requested wider vertical spread (eyes higher, mouth lower) */
+    --triangle-h: min(50vh, 550px);
+
+    /* 3. Define Center Point */
+    --center-y: 50vh;
+
+    /* 4. Calculate Vertical Positions relative to Center Y */
+    /* Eyes are shifted UP by half triangle height */
+    --eye-top: calc(var(--center-y) - (var(--triangle-h) / 2) - (var(--eye-h) / 2));
+
+    /* Mouth is shifted DOWN by half triangle height */
+    --mouth-top: calc(var(--center-y) + (var(--triangle-h) / 2) - (var(--mouth-h) / 2));
+
+    /* 5. Horizontal Spacing */
+    --padding-x: 10vw;
+}
 
 /* -----------------------------
    BACKGROUND & LAYOUT
@@ -6,20 +36,27 @@
 body {
     background: #6cc56c;
     overflow: hidden;
-    /* CRITICAL: Prevent scrolling */
     width: 100vw;
     height: 100vh;
     margin: 0;
     position: fixed;
-    /* Lock body in place */
 }
 
 .inner-panel {
     width: 100%;
     height: 100%;
     position: relative;
-    /* Use flex/grid if we want vertical centering, 
-     but keeping absolute for the requested layout */
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile: Overlay behavior (no shift) */
+@media (min-width: 769px) {
+    body.sidebar-open .inner-panel {
+        margin-left: 280px;
+        width: calc(100% - 280px);
+    }
 }
 
 /* -----------------------------
@@ -27,34 +64,29 @@ body {
 ----------------------------- */
 .top-inputs {
     position: absolute;
-    /* Use vh for vertical spacing to scale with height */
-    top: 15vh;
+    /* Driven by center-based calculation */
+    top: var(--eye-top);
+
     left: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: 0 10vw;
+    padding: 0 var(--padding-x);
+
+    /* Ensure z-index is managed if overlaps occur */
+    z-index: 10;
 }
 
-/* 
-   Eye Sizing:
-   On Landscape (Short screens), vh limits height. 
-   On Portrait, vw limits width. 
-   We clamp both to fit "One Page".
-*/
 .eye {
     position: relative;
     overflow: hidden;
     background: white;
     border: none;
 
-    /* Responsive Size logic */
-    width: min(180px, 30vw);
-    height: min(50px, 10vh);
-    /* Scale with height too */
+    width: var(--eye-w);
+    height: var(--eye-h);
 
     font-size: clamp(14px, 2vh, 22px);
-
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -88,21 +120,24 @@ body {
 ----------------------------- */
 .mouth {
     position: absolute;
-    /* Position from bottom using vh */
-    bottom: 15vh;
+    /* Driven by center-based calculation */
+    top: var(--mouth-top);
+    bottom: auto;
+    /* Remove bottom anchor */
+
     left: 50%;
     transform: translateX(-50%);
     background: white;
     border: none;
 
-    width: min(320px, 60vw);
-    height: min(70px, 12vh);
-    /* Scale with height */
+    width: var(--mouth-w);
+    height: var(--mouth-h);
 
     font-size: clamp(18px, 4vh, 32px);
     color: yellow;
     cursor: pointer;
     transition: all 0.3s ease;
+    z-index: 10;
 }
 
 /* -----------------------------
@@ -111,37 +146,37 @@ body {
 .tears {
     position: absolute;
     /* 
-     Position tears relative to eyes using vh.
-     Eye Top (15vh) + Eye Height (~10vh max) + Gap (5vh)
+     Tears hang below the eyes.
+     Top = Eye Top + Eye Height + Gap
   */
-    top: 30vh;
+    top: calc(var(--eye-top) + var(--eye-h) + 2vh);
 
     display: flex;
     flex-direction: column;
-    /* Vertical gap scales with screen height */
     gap: 2vh;
+    z-index: 5;
 }
 
-/* Horizontal Centering: Match Eye Center */
-/* Center = Padding (10vw) + Half Eye Width */
-/* Since Eye Width is dynamic, we approximate or usecalc with the max bounds */
-
+/* 
+   Centering Logic:
+   Align with Eye Centers.
+   Center X = Padding + Half Eye Width
+*/
 .tears.left {
-    /* Aligns roughly with center of left eye area */
-    left: calc(10vw + min(90px, 15vw));
+    left: calc(var(--padding-x) + (var(--eye-w) / 2));
     transform: translateX(-50%);
 }
 
 .tears.right {
-    right: calc(10vw + min(90px, 15vw));
+    right: calc(var(--padding-x) + (var(--eye-w) / 2));
     transform: translateX(50%);
 }
 
 .tear {
-    /* Scale tear size with viewport, but cap it */
     width: min(29px, 5vmin);
     height: min(29px, 5vmin);
     background: #000;
+    border: none;
     opacity: 0.4;
     animation: tearGlow 3.2s ease-in-out infinite;
     cursor: pointer;
@@ -186,6 +221,49 @@ body {
 }
 
 /* -----------------------------
+   YOUTUBE LINKS
+----------------------------- */
+.youtube-links {
+    position: absolute;
+    top: calc(var(--mouth-top) + var(--mouth-h) + 16px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    width: var(--mouth-w);
+    justify-content: space-between;
+    z-index: 9;
+}
+
+.youtube-icon {
+    width: 32px;
+    height: 24px;
+    background: red;
+    /* Typical YouTube color, user can request changes */
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Little play triangle for the icon */
+.youtube-icon::after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 8px solid white;
+}
+
+.youtube-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* -----------------------------
    PIXEL EFFECTS
 ----------------------------- */
 .pixelate {
@@ -220,4 +298,43 @@ body {
     filter: contrast(180%) saturate(90%);
     image-rendering: pixelated;
     transition: opacity 0.6s ease;
+}
+
+/* -----------------------------
+   YOUTUBE PLAYER
+----------------------------- */
+.youtube-player-container {
+    position: absolute;
+    top: calc(var(--mouth-top) + var(--mouth-h) + 56px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--mouth-w);
+    aspect-ratio: 16 / 9;
+    margin-bottom: 40px;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+.youtube-player-container.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#youtubePlayer {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* -----------------------------
+   SCROLL SPACER
+----------------------------- */
+.inner-panel::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: calc(var(--mouth-top) + var(--mouth-h) + 56px + (var(--mouth-w) * 9 / 16) + 80px);
+    width: 100%;
+    height: 1px;
 }

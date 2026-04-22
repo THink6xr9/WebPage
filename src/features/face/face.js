@@ -5,17 +5,15 @@ import {
 } from '../../state.js';
 import { OPEN_SEA_LINKS } from '../../data/opensea-links.js';
 import { MEDIUM_LINKS } from '../../data/medium-links.js';
+import { YOUTUBE_LINKS } from '../../data/youtube-links.js';
+import { FACE_WORDS } from '../../data/face-words.js';
 
 /* -----------------------------
    CONSTANTS & DATA
 ----------------------------- */
 const TEAR_LINKS = [...OPEN_SEA_LINKS, ...MEDIUM_LINKS];
 
-const LINKS = [
-    "https://opensea.io/collection/time-402",
-    "https://medium.com/@qmbgjhq",
-    "https://x.com/_THink__6xr9"
-];
+
 
 /* -----------------------------
    HTML STRUCTURE
@@ -29,6 +27,14 @@ const FACE_HTML = `
     </div>
 
     <button class="mouth" id="btn3">EXPLORE</button>
+
+    <div class="youtube-links" id="youtubeLinks">
+      <!-- Icons injected here -->
+    </div>
+
+    <div id="youtubePlayerContainer" class="youtube-player-container hidden">
+      <iframe id="youtubePlayer" width="320" height="180" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
 
     <div class="tears left">
       <div class="tear"></div>
@@ -57,8 +63,6 @@ let leftEye, rightEye, exploreBtn;
 ----------------------------- */
 export function initFace() {
     // Inject HTML
-    // We want this to be the main content, so usually we append to body or specific container
-    // For this refactor, we are replacing the existing .inner-panel logic
     document.body.insertAdjacentHTML("beforeend", FACE_HTML);
 
     // Get Elements
@@ -66,12 +70,44 @@ export function initFace() {
     rightEye = document.getElementById("btn2");
     exploreBtn = document.getElementById("btn3");
 
+    // Render YouTube Links
+    const ytContainer = document.getElementById("youtubeLinks");
+    const playerContainer = document.getElementById("youtubePlayerContainer");
+    const player = document.getElementById("youtubePlayer");
+
+    if (ytContainer) {
+        const randomYtLinks = shuffle(YOUTUBE_LINKS).slice(0, 8);
+        randomYtLinks.forEach(link => {
+            const icon = document.createElement("div");
+            icon.className = "youtube-icon";
+            icon.addEventListener("click", () => {
+                incrementInteraction();
+
+                let videoId = "";
+                if (link.includes("youtu.be/")) {
+                    videoId = link.split("youtu.be/")[1].split("?")[0];
+                } else if (link.includes("youtube.com/watch?v=")) {
+                    videoId = link.split("youtube.com/watch?v=")[1].split("&")[0];
+                }
+
+                if (videoId) {
+                    player.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
+                    playerContainer.classList.remove("hidden");
+                } else {
+                    window.open(link, "_blank");
+                }
+            });
+            ytContainer.appendChild(icon);
+        });
+    }
+
     // Setup Interactions
     setupClickHandlers();
     setupTearsInteraction();
 
     // Start Lifecycle
     applyColorState();
+    randomizeFaceWords();
     subscribe(applyColorState);
     setTimeout(randomBlink, 2000);
 }
@@ -100,6 +136,15 @@ function swapEyeColors() {
 function shuffleFaceOrder() {
     state.colorState = shuffle(state.colorState);
     applyColorState();
+    randomizeFaceWords();
+}
+
+function randomizeFaceWords() {
+    if (!leftEye || !rightEye || !exploreBtn) return;
+    const shuffled = shuffle(FACE_WORDS);
+    leftEye.textContent = shuffled[0 % shuffled.length] || "Enter";
+    rightEye.textContent = shuffled[1 % shuffled.length] || "Enter";
+    exploreBtn.textContent = shuffled[2 % shuffled.length] || "EXPLORE";
 }
 
 function shuffle(array) {
@@ -170,20 +215,16 @@ function screenPixelate() {
    INTERACTIONS
 ----------------------------- */
 function setupClickHandlers() {
-    leftEye.addEventListener("click", () => handleFaceClick(leftEye, LINKS[0]));
-    rightEye.addEventListener("click", () => handleFaceClick(rightEye, LINKS[1]));
-    exploreBtn.addEventListener("click", () => handleFaceClick(exploreBtn, shuffle(LINKS)[0]));
+    leftEye.addEventListener("click", () => handleFaceClick(leftEye));
+    rightEye.addEventListener("click", () => handleFaceClick(rightEye));
+    exploreBtn.addEventListener("click", () => handleFaceClick(exploreBtn));
 }
 
-function handleFaceClick(element, link) {
+function handleFaceClick(element) {
     incrementInteraction();
     pixelBreak(element);
     screenPixelate();
     shuffleFaceOrder();
-
-    setTimeout(() => {
-        window.open(link, "_blank");
-    }, 450);
 }
 
 function setupTearsInteraction() {
