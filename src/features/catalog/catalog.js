@@ -176,6 +176,7 @@ function setupCatalog() {
             <h2 class="immersive-title">${item.title}</h2>
             <p class="immersive-story">${item.story || "A reflective canvas in the Time Collection exploring presence, consciousness, and inner movement."}</p>
             <div class="immersive-links">
+              ${item.id === 'time-017' ? `<a href="time-017/" class="immersive-link glass-effect highlight-btn" style="background: rgba(227, 196, 133, 0.25); border-color: rgba(227, 196, 133, 0.5); color: #e3c485;">👁 Play Experience</a>` : ''}
               ${item.openseaLink ? `<a href="${item.openseaLink}" target="_blank" class="immersive-link glass-effect">⛵ OpenSea</a>` : ''}
               ${item.mediumLink ? `<a href="${item.mediumLink}" target="_blank" class="immersive-link glass-effect">✍ Medium</a>` : ''}
               ${item.youtubeLink ? `<a href="${item.youtubeLink}" target="_blank" class="immersive-link glass-effect">▶ YouTube</a>` : ''}

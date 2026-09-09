@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+  --background: #060605;
+  --foreground: #e4dfd0;
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  --color-earth-deep: #060605;
+  --color-earth-dark: #14120e;
+  --color-earth-muted: #2a251f;
+  --color-green-dark: #131b10;
+  --color-green-muted: #283722;
+  --color-gold-warm: #bda26c;
+  --color-gold-glow: #e3c485;
+
+  --animate-breath: breath 8s ease-in-out infinite;
+  --animate-pulse-slow: pulse-slow 4s ease-in-out infinite;
+}
+
+@keyframes breath {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.03);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+html, body {
+  background-color: var(--background);
+  color: var(--foreground);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Hide scrollbars globally */
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  box-sizing: border-box;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Custom utility styles */
+.glass-panel {
+  background: rgba(20, 18, 14, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(189, 162, 108, 0.15);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(227, 196, 133, 0.4);
+}
+
+.pulsing-glow {
+  box-shadow: 0 0 20px rgba(227, 196, 133, 0.2);
+}
